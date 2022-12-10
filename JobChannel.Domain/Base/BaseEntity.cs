@@ -1,6 +1,6 @@
 ﻿namespace JobChannel.Domain.Base
 {
-    public abstract class BaseEntity<TId>
+    public abstract record BaseEntity<TId>
     {
         public TId Id { get; }
 
