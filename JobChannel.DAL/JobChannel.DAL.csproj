@@ -12,7 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="UOW\Repositories\" />
+	  <ProjectReference Include="..\JobChannel.Domain\JobChannel.Domain.csproj" />
 	</ItemGroup>
 
 </Project>
