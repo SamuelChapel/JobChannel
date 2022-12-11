@@ -14,7 +14,7 @@ namespace JobChannel.Domain.BO
         public string Experience { get; set; }
         public Job Job { get; set; }
         public Contract Contract { get; set; }
-        public Region Region { get; set; }
+        public City City { get; set; }
         public Company Company { get; set; }
 
         public JobOffer() : base(-1)
@@ -26,7 +26,7 @@ namespace JobChannel.Domain.BO
             Experience = String.Empty;
             Job = new Job();
             Contract = new Contract();
-            Region = new Region();
+            City = new City();
             Company = new Company();
         }
 
@@ -41,7 +41,7 @@ namespace JobChannel.Domain.BO
             string experience,
             Job job,
             Contract contract,
-            Region region,
+            City city,
             Company company) : base(id)
         {
             Title = title;
@@ -53,7 +53,7 @@ namespace JobChannel.Domain.BO
             Experience = experience;
             Job = job;
             Contract = contract;
-            Region = region;
+            City = city;
             Company = company;
         }
     }
