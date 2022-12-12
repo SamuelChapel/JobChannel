@@ -14,10 +14,10 @@ namespace JobChannel.Domain.BO
             Code = String.Empty;
         }
 
-        public Contract(int id, string name, string codeRome) : base(id)
+        public Contract(int id, string name, string code) : base(id)
         {
             Name = name;
-            Code = codeRome;
+            Code = code;
         }
     }
 }

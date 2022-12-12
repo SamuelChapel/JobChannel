@@ -10,6 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\JobChannel.DAL\JobChannel.DAL.csproj" />
 	  <ProjectReference Include="..\JobChannel.Domain\JobChannel.Domain.csproj" />
 	</ItemGroup>
 

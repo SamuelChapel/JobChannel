@@ -12,10 +12,10 @@ namespace JobChannel.Domain.BO
         public string Url { get; set; }
         public string Salary { get; set; }
         public string Experience { get; set; }
+        public string Company { get; set; }
         public Job Job { get; set; }
         public Contract Contract { get; set; }
         public City City { get; set; }
-        public Company Company { get; set; }
 
         public JobOffer() : base(-1)
         {
@@ -24,10 +24,10 @@ namespace JobChannel.Domain.BO
             Url = String.Empty;
             Salary = String.Empty;
             Experience = String.Empty;
+            Company = String.Empty;
             Job = new Job();
             Contract = new Contract();
             City = new City();
-            Company = new Company();
         }
 
         public JobOffer(
@@ -39,10 +39,10 @@ namespace JobChannel.Domain.BO
             string url,
             string salary,
             string experience,
+            string company,
             Job job,
             Contract contract,
-            City city,
-            Company company) : base(id)
+            City city) : base(id)
         {
             Title = title;
             Description = description;
@@ -51,10 +51,10 @@ namespace JobChannel.Domain.BO
             Url = url;
             Salary = salary;
             Experience = experience;
+            Company = company;
             Job = job;
             Contract = contract;
             City = city;
-            Company = company;
         }
     }
 }

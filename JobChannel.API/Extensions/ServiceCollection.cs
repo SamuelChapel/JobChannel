@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using JobChannel.BLL.JobOfferService;
+using JobChannel.DAL.UOW;
+using JobChannel.DAL.UOW.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace JobChannel.API.Extensions
 {
@@ -6,6 +9,10 @@ namespace JobChannel.API.Extensions
     {
         public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
+            services.AddScoped<IJobOfferService, JobOfferService>();
+            services.AddScoped<IJobOfferRepository, JobOfferRepository>();
+            services.AddScoped<IDbSession, DbSession>();
+
             return services;
         }
     }
