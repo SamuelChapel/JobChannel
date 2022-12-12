@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using JobChannel.Domain.BO;
 
-namespace JobChannel.DAL.UOW.Repositories
+namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 {
     public interface IJobOfferRepository
     {

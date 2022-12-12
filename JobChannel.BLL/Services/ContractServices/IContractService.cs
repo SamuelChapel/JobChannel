@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using JobChannel.Domain.BO;
 
-namespace JobChannel.BLL.ContractService
+namespace JobChannel.BLL.Services.ContractServices
 {
     public interface IContractService
     {

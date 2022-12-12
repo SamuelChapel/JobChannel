@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Dapper;
 using JobChannel.Domain.BO;
 
-namespace JobChannel.DAL.UOW.Repositories
+namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 {
     public class JobOfferRepository : IJobOfferRepository
     {

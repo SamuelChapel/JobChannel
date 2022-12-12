@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using JobChannel.Domain.BO;
 using JobChannel.Domain.DTO;
 
-namespace JobChannel.BLL.JobOfferService
+namespace JobChannel.BLL.Services.JobOfferServices
 {
     public interface IJobOfferService
     {

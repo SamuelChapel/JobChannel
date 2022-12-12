@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using JobChannel.BLL.JobOfferService;
+using JobChannel.BLL.Services.JobOfferServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobChannel.API.Controllers
