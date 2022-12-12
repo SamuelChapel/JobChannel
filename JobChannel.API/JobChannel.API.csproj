@@ -9,4 +9,9 @@
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\JobChannel.BLL\JobChannel.BLL.csproj" />
+	  <ProjectReference Include="..\JobChannel.DAL\JobChannel.DAL.csproj" />
+	</ItemGroup>
+
 </Project>

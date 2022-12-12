@@ -9,7 +9,7 @@ namespace JobChannel.Domain.BO
         public string Name { get; set; }
         public string Code { get; set; }
         public Department Department { get; set; }
-        public IEnumerable<string> PostCodes { get; set; }
+        public List<string> Postcodes { get; set; }
         public int Population { get; set; }
 
         public City() : base(-1)
@@ -17,7 +17,7 @@ namespace JobChannel.Domain.BO
             Name = String.Empty;
             Code = String.Empty;
             Department = new Department();
-            PostCodes= new List<string>();
+            Postcodes= new List<string>();
             Population = 0;
         }
 
@@ -26,13 +26,13 @@ namespace JobChannel.Domain.BO
             string name,
             string codeRome,
             Department department,
-            IEnumerable<string> postCodes,
+            List<string> postcode,
             int population) : base(id)
         {
             Name = name;
             Code = codeRome;
             Department = department;
-            PostCodes = postCodes;
+            Postcodes = postcode;
             Population = population;
         }
     }
