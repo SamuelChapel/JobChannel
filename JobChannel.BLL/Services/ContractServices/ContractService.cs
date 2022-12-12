@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using JobChannel.DAL.UOW.Repositories;
+using JobChannel.DAL.UOW.Repositories.ContractRepositories;
 using JobChannel.Domain.BO;
 
-namespace JobChannel.BLL.ContractService
+namespace JobChannel.BLL.Services.ContractServices
 {
     public class ContractService : IContractService
     {
@@ -11,6 +11,6 @@ namespace JobChannel.BLL.ContractService
 
         public ContractService(IContractRepository contractRepository) => _contractRepository = contractRepository;
 
-        public async Task<IEnumerable<Contract>> GetAllContracts() => await _contractRepository.GetAllContract();
+        public async Task<IEnumerable<Contract>> GetAllContracts() => await _contractRepository.GetAllContracts();
     }
 }

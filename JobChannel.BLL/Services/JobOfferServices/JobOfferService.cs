@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using JobChannel.DAL.UOW.Repositories;
+using JobChannel.DAL.UOW.Repositories.JobOfferRepositories;
 using JobChannel.Domain.BO;
 using JobChannel.Domain.DTO;
 
-namespace JobChannel.BLL.JobOfferService
+namespace JobChannel.BLL.Services.JobOfferServices
 {
     public class JobOfferService : IJobOfferService
     {
