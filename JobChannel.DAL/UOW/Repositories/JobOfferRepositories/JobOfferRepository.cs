@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using JobChannel.Domain.BO;
+using JobChannel.Domain.DTO;
 
 namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 {
@@ -45,5 +46,15 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                 return groupedJobOffer;
             });
         }
+
+        public Task<JobOffer> CreateJobOffer(JobOffer request)
+        {
+            string query = @"INSERT INTO JobChannel.JobOffer (Code, Title, Description, PublicationDate, ModificationDate, Url, Salary, Experience, Id_Job, )
+                             OUTPUT INSERTED.ID
+                             VALUES ()";
+        }
+
+        public Task<int> DeleteJobOffer(int id) => throw new System.NotImplementedException();
+        public Task<JobOffer> UpdateJobOffer(JobOffer request) => throw new System.NotImplementedException();
     }
 }

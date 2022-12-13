@@ -21,7 +21,7 @@ namespace JobChannel.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByRegionId(int id)
         {
-            return Ok(await _departmentService.GetByRegionId(id));
+            return Ok(await _departmentService.GetDepartmentsByRegionId(id));
         }
     }
 }
