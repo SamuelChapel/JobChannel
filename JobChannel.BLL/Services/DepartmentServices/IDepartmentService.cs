@@ -9,6 +9,6 @@ namespace JobChannel.BLL.Services.DepartmentServices
     {
         Task<IEnumerable<Department>> GetAllDepartments();
 
-        Task<IEnumerable<DepartmentGetResponse>?> GetByRegionId(int regionId);
+        Task<IEnumerable<DepartmentGetResponse>?> GetDepartmentsByRegionId(int regionId);
     }
 }

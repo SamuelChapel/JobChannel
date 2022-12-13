@@ -19,25 +19,6 @@ namespace JobChannel.API.Extensions
     {
         public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
-            services.AddScoped<ICityService, CityService>();
-            services.AddScoped<ICityRepository, CityRepository>();
-
-            services.AddScoped<IDepartmentService, DepartmentService>();
-            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-
-            services.AddScoped<IRegionService, RegionService>();
-            services.AddScoped<IRegionRepository, RegionRepository>();
-
-            services.AddScoped<IJobService, JobService>();
-            services.AddScoped<IJobRepository, JobRepository>();
-
-            services.AddScoped<IContractService, ContractService>();
-            services.AddScoped<IContractRepository, ContractRepository>();
-
-            services.AddScoped<IJobOfferService, JobOfferService>();
-            services.AddScoped<IJobOfferRepository, JobOfferRepository>();
-
-            services.AddScoped<IDbSession, DbSession>();
 
             return services;
         }

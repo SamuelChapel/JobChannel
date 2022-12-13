@@ -1,4 +1,6 @@
 using JobChannel.API.Extensions;
+using JobChannel.BLL.Extensions;
+using JobChannel.DAL.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +22,9 @@ namespace JobChannel.API
             Configuration.GetConnectionString("OVH");
             services.AddControllers();
             services.AddApiServices();
+            services.AddBLLServices();
+            services.AddDALServices();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "JobChannel.API", Version = "v1" });

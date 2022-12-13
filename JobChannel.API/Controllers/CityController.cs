@@ -19,5 +19,11 @@ namespace JobChannel.API.Controllers
         {
             return Ok(await _cityService.GetAllCities());
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByDepartmentId(int id)
+        {
+            return Ok(await _cityService.GetCitiesByDepartmentId(id));
+        }
     }
 }
