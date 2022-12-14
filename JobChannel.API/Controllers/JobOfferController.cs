@@ -31,7 +31,10 @@ namespace JobChannel.API.Controllers
             [FromServices] ICityService cityService,
             [FromServices] IContractService contractService)
         {
-            new JobOfferCreateRequestValidator().Validate(jobOfferCreateRequest);
+            var validationResult = new JobOfferCreateRequestValidator().Validate(jobOfferCreateRequest);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.ToDictionary());
 
             JobOffer jobOffer = new()
             {
@@ -56,7 +59,10 @@ namespace JobChannel.API.Controllers
             [FromRoute] int id,
             [FromBody] JobOfferUpdateRequest jobOfferUpdateRequest)
         {
-            new JobOfferUpdateRequestValidator().Validate(jobOfferUpdateRequest);
+            var validationResult = new JobOfferUpdateRequestValidator().Validate(jobOfferUpdateRequest);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.ToDictionary());
 
             JobOffer jobOffer = new()
             {

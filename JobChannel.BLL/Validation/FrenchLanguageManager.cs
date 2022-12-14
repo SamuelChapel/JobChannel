@@ -15,7 +15,6 @@ namespace JobChannel.BLL.Validation
             AddTranslation("fr", "DepartmentNotFound", "Le département n'a pas été trouvé");
             AddTranslation("fr", "CityNotFound", "La ville n'a pas été trouvé");
             AddTranslation("fr", "JobOfferNotFound", "Le poste n'a pas été trouvé");
-
         }
     }
 }
