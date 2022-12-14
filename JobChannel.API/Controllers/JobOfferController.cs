@@ -3,7 +3,6 @@ using JobChannel.BLL.Services.CityServices;
 using JobChannel.BLL.Services.ContractServices;
 using JobChannel.BLL.Services.JobOfferServices;
 using JobChannel.BLL.Services.JobServices;
-using JobChannel.BLL.Services.RegionServices;
 using JobChannel.Domain.BO;
 using JobChannel.Domain.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +21,13 @@ namespace JobChannel.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _jobOfferService.GetAll());
+        }
+
+        [HttpPost("search")]
+        public async Task<IActionResult> Find([FromBody] JobOfferFindRequest jobOfferFindRequest)
+        {
+            //TODO Find with parameters
+            return Ok();
         }
 
         [HttpPost]

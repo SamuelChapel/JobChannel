@@ -35,20 +35,26 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 
         public async Task<City> GetCityById(int id)
         {
-            string query = @"SELECT c.Id, c.Name, c.Code, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
+            string query = @"SELECT c.Id, c.Name, c.Code, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
                             FROM JobChannel.City c
+                            JOIN JobChannel.CityPostcode cpc ON cpc.Id_City = c.Id
                             JOIN JobChannel.Department d ON d.Id = c.Id_Department
                             JOIN JobChannel.Region r ON r.Id = d.Id_Region
                             WHERE c.Id = @id";
 
-            return (await _dbSession.Connection.QueryAsync<City, Department, Region, City>(query, (city, department, region) =>
+            return (await _dbSession.Connection.QueryAsync<City, PostCode, Department, Region, City>(query, (city, postcode, department, region) =>
             {
                 city.Department = department;
                 city.Department.Region = region;
+                city.Postcodes.Add(postcode.Postcode);
                 return city;
             },
-        splitOn: "Id, Id",
-        param: new { id })).First();
+        param: new { id })).GroupBy(c => c.Id).Select(g =>
+        {
+            var groupedCity = g.First();
+            groupedCity.Postcodes = g.Select(c => c.Postcodes.Single()).ToList();
+            return groupedCity;
+        }).Single();
         }
     }
 }

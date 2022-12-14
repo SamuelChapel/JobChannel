@@ -12,12 +12,12 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 
         public JobOfferRepository(IDbSession dbSession) => _dbSession = dbSession;
 
-        public async Task<IEnumerable<JobOffer>> GetJobOffersAsync()
+        public async Task<IEnumerable<JobOffer>> GetJobOffers()
         {
             string query = @"SELECT jo.Id, jo.Title, jo.Description, jo.PublicationDate, jo.ModificationDate,
-                            jo.Url, jo.Salary, jo.Experience, jo.Company, jo.Id_Job, j.Id, j.Name, j.CodeRome, jo.Id_City, c.Id, c.Name,
-                            c.Code, c.Population, cpc.Id_City, cpc.Postcode, c.Id_Department, d.Id, d.Name, d.Code,
-                            d.Id_Region, r.Id, r.Name, r.Code, jo.Id_Contract, ct.Id, ct.Name, ct.Code
+                            jo.Url, jo.Salary, jo.Experience, jo.Company, j.Id, j.Name, j.CodeRome, c.Id, c.Name,
+                            c.Code, c.Population, c.Id, cpc.Postcode, d.Id, d.Name, d.Code,
+                            r.Id, r.Name, r.Code, ct.Id, ct.Name, ct.Code
                             FROM JobChannel.JobOffer jo
                             JOIN JobChannel.Job j ON jo.Id_Job = j.Id
                             JOIN JobChannel.City c ON c.Id = jo.Id_City
@@ -35,8 +35,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                 jobOffer.City.Department.Region = region;
                 jobOffer.Contract = contract;
                 return jobOffer;
-            },
-            splitOn: "Id_Job, Id_City, Id_City, Id_Department, Id_Region, Id_Contract");
+            });
 
             return jobOffers.GroupBy(jo => jo.Id).Select(g =>
             {

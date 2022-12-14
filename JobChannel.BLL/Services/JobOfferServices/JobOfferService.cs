@@ -36,7 +36,7 @@ namespace JobChannel.BLL.Services.JobOfferServices
 
         public Task<IEnumerable<JobOffer>> GetAll()
         {
-            return _jobOfferRepository.GetJobOffersAsync();
+            return _jobOfferRepository.GetJobOffers();
         }
 
         public Task<JobOffer> GetById(int id)
