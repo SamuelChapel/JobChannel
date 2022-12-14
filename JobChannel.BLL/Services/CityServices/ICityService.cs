@@ -9,6 +9,8 @@ namespace JobChannel.BLL.Services.CityServices
     {
         Task<IEnumerable<City>> GetAllCities();
 
-        Task<IEnumerable<CityGetResponse>?> GetCitiesByDepartmentId(int departmentId);
+        Task<IEnumerable<City>?> GetCitiesByDepartmentId(int departmentId);
+
+        Task<City> GetById(int id);
     }
 }

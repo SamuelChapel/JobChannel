@@ -20,10 +20,16 @@ namespace JobChannel.API.Controllers
             return Ok(await _cityService.GetAllCities());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("Department/{id}")]
         public async Task<IActionResult> GetByDepartmentId(int id)
         {
             return Ok(await _cityService.GetCitiesByDepartmentId(id));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            return Ok(await _cityService.GetById(id));
         }
     }
 }

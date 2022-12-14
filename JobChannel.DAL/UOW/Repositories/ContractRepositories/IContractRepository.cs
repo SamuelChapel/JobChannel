@@ -7,5 +7,6 @@ namespace JobChannel.DAL.UOW.Repositories.ContractRepositories
     public interface IContractRepository
     {
         Task<IEnumerable<Contract>> GetAllContracts();
+        Task<Contract?> GetById(int id);
     }
 }
