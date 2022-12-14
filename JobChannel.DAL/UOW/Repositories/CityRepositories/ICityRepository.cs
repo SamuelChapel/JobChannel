@@ -9,6 +9,8 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
     {
         Task<IEnumerable<City>> GetAllCities();
 
-        Task<IEnumerable<CityGetResponse>?> GetCitiesByDepartmentId(int departmentId);
+        Task<IEnumerable<City>?> GetCitiesByDepartmentId(int departmentId);
+
+        Task<City> GetCityById(int id);
     }
 }

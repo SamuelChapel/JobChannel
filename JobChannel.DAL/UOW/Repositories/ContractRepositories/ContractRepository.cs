@@ -18,5 +18,14 @@ namespace JobChannel.DAL.UOW.Repositories.ContractRepositories
 
             return await _dbSession.Connection.QueryAsync<Contract>(query);
         }
+
+        public async Task<Contract?> GetById(int id)
+        {
+            string query = @"SELECT c.Id, c.Name, c.Code
+                            FROM JobChannel.Contract c
+                            WHERE c.Id = @id";
+
+            return await _dbSession.Connection.QueryFirstOrDefaultAsync<Contract>(query, new { id });
+        }
     }
 }

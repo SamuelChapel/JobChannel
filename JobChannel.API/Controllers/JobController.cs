@@ -17,5 +17,11 @@ namespace JobChannel.API.Controllers
         {
             return Ok(await _jobService.GetAllJobs());
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            return Ok(await _jobService.GetById(id));
+        }
     }
 }

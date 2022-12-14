@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using JobChannel.Domain.BO;
-using JobChannel.Domain.DTO;
 
 namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 {
@@ -47,14 +46,44 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             });
         }
 
-        public Task<JobOffer> CreateJobOffer(JobOffer request)
+        public async Task<int> CreateJobOffer(JobOffer jobOffer)
         {
-            string query = @"INSERT INTO JobChannel.JobOffer (Code, Title, Description, PublicationDate, ModificationDate, Url, Salary, Experience, Id_Job, )
+            string query = @"INSERT INTO JobChannel.JobOffer (Title, Description, PublicationDate, ModificationDate, 
+                             Url, Salary, Experience, Id_Job, ID_Contract, Id_City)
                              OUTPUT INSERTED.ID
-                             VALUES ()";
+                             VALUES (@Title, @Description, @PublicationDate, @ModificationDate, @Url, @Salary, @Experience, 
+                             @Id_Job, @ID_Contract, @Id_City)";
+
+            var param = new DynamicParameters(jobOffer);
+            param.Add("Id_Contract", jobOffer.Contract.Id);
+            param.Add("Id_City", jobOffer.City.Id);
+            param.Add("Id_Job", jobOffer.Job.Id);
+
+            return await _dbSession.Connection.ExecuteAsync(query, param);
         }
 
-        public Task<int> DeleteJobOffer(int id) => throw new System.NotImplementedException();
-        public Task<JobOffer> UpdateJobOffer(JobOffer request) => throw new System.NotImplementedException();
+        public async Task<int> UpdateJobOffer(JobOffer jobOffer)
+        {
+            string query = @"UPDATE JobChannel.JobOffer
+                            SET Title = @Title, Description = @Description, PublicationDate = @PublicationDate, 
+                            ModificationDate = @ModificationDate, Url = @Url, Salary = @Salary, Experience = @Experience, 
+                            Company = @Company, Id_Job = @Id_Job, ID_Contract = @ID_Contract, Id_City = @Id_City
+                            WHERE Id = @Id";
+
+            var param = new DynamicParameters(jobOffer);
+            param.Add("Id_Contract", jobOffer.Contract.Id);
+            param.Add("Id_City", jobOffer.City.Id);
+            param.Add("Id_Job", jobOffer.Job.Id);
+
+            return await _dbSession.Connection.ExecuteAsync(query, param);
+        }
+
+        public async Task<int> DeleteJobOffer(int id)
+        {
+            string query = @"DELETE FROM JobChannel.JobOffer
+                             WHERE Id = @id";
+
+            return await _dbSession.Connection.ExecuteAsync(query, new { id });
+        }
     }
 }

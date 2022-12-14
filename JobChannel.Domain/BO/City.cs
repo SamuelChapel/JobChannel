@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentValidation;
 using JobChannel.Domain.Base;
 
 namespace JobChannel.Domain.BO

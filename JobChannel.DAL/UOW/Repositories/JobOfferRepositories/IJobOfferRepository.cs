@@ -8,10 +8,10 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
     {
         Task<IEnumerable<JobOffer>> GetJobOffersAsync();
 
-        Task<JobOffer> CreateJobOffer(JobOffer request);
+        Task<int> CreateJobOffer(JobOffer request);
 
         Task<int> DeleteJobOffer(int id);
 
-        Task<JobOffer> UpdateJobOffer(JobOffer request);
+        Task<int> UpdateJobOffer(JobOffer request);
     }
 }
