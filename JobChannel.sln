@@ -3,24 +3,28 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobChannel.API", "JobChannel.API\JobChannel.API.csproj", "{CB63B15F-1B83-446D-8FB2-D879D93C13FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobChannel.API", "JobChannel.API\JobChannel.API.csproj", "{CB63B15F-1B83-446D-8FB2-D879D93C13FD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2A6BA4E0-16B0-440F-A674-EE9DD434E2A7} = {2A6BA4E0-16B0-440F-A674-EE9DD434E2A7}
 		{EF930587-C950-4046-90D3-8634FE48B80A} = {EF930587-C950-4046-90D3-8634FE48B80A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobChannel.Domain", "JobChannel.Domain\JobChannel.Domain.csproj", "{2A6BA4E0-16B0-440F-A674-EE9DD434E2A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobChannel.Domain", "JobChannel.Domain\JobChannel.Domain.csproj", "{2A6BA4E0-16B0-440F-A674-EE9DD434E2A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobChannel.DAL", "JobChannel.DAL\JobChannel.DAL.csproj", "{0C8EB2A9-C410-4AF0-BEF9-3C80029EEB75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobChannel.DAL", "JobChannel.DAL\JobChannel.DAL.csproj", "{0C8EB2A9-C410-4AF0-BEF9-3C80029EEB75}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2A6BA4E0-16B0-440F-A674-EE9DD434E2A7} = {2A6BA4E0-16B0-440F-A674-EE9DD434E2A7}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobChannel.BLL", "JobChannel.BLL\JobChannel.BLL.csproj", "{EF930587-C950-4046-90D3-8634FE48B80A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobChannel.BLL", "JobChannel.BLL\JobChannel.BLL.csproj", "{EF930587-C950-4046-90D3-8634FE48B80A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0C8EB2A9-C410-4AF0-BEF9-3C80029EEB75} = {0C8EB2A9-C410-4AF0-BEF9-3C80029EEB75}
 		{2A6BA4E0-16B0-440F-A674-EE9DD434E2A7} = {2A6BA4E0-16B0-440F-A674-EE9DD434E2A7}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobChannel.Tests.Units", "JobChannel.Tests.Units\JobChannel.Tests.Units.csproj", "{251F68A3-B8E2-4E2A-AA5C-93FBACC6095B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobChannel.Tests.Integrations", "JobChannel.Tests.Integrations\JobChannel.Tests.Integrations.csproj", "{5635B390-4708-45D6-A0C7-FBB9E3AE17BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +48,14 @@ Global
 		{EF930587-C950-4046-90D3-8634FE48B80A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF930587-C950-4046-90D3-8634FE48B80A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF930587-C950-4046-90D3-8634FE48B80A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{251F68A3-B8E2-4E2A-AA5C-93FBACC6095B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{251F68A3-B8E2-4E2A-AA5C-93FBACC6095B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{251F68A3-B8E2-4E2A-AA5C-93FBACC6095B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{251F68A3-B8E2-4E2A-AA5C-93FBACC6095B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5635B390-4708-45D6-A0C7-FBB9E3AE17BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5635B390-4708-45D6-A0C7-FBB9E3AE17BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5635B390-4708-45D6-A0C7-FBB9E3AE17BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5635B390-4708-45D6-A0C7-FBB9E3AE17BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
