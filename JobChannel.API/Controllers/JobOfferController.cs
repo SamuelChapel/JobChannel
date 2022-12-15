@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using JobChannel.BLL.Services.CityServices;
 using JobChannel.BLL.Services.ContractServices;
 using JobChannel.BLL.Services.JobOfferServices;
@@ -17,17 +19,18 @@ namespace JobChannel.API.Controllers
 
         public JobOfferController(IJobOfferService jobOfferService) => _jobOfferService = jobOfferService;
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await _jobOfferService.GetAll());
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    return Ok(await _jobOfferService.GetAll());
+        //}
 
         [HttpPost("search")]
         public async Task<IActionResult> Find([FromBody] JobOfferFindRequest jobOfferFindRequest)
         {
-            //TODO Find with parameters
-            return Ok();
+            IReadOnlyDictionary<string, dynamic> keyValuePairs;
+                //if(jobOfferFindRequest.Id_City.HasValue) keyValuePairs
+            return Ok(await _jobOfferService.GetAll(null));
         }
 
         [HttpPost]
@@ -84,7 +87,6 @@ namespace JobChannel.API.Controllers
                 Job = new() { Id = jobOfferUpdateRequest.JobId },
                 City = new() { Id = jobOfferUpdateRequest.CityId },
                 Contract = new() { Id = jobOfferUpdateRequest.ContractId }
-
             };
 
             return Ok(await _jobOfferService.Update(jobOffer));

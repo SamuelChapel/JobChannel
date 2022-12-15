@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 using JobChannel.BLL.Services.CityServices;
 using JobChannel.BLL.Services.ContractServices;
 using JobChannel.BLL.Services.JobServices;
-using JobChannel.DAL.UOW.Repositories.JobOfferRepositories;
+using JobChannel.DAL.UOW;
 using JobChannel.Domain.BO;
 
 namespace JobChannel.BLL.Services.JobOfferServices
 {
     public class JobOfferService : IJobOfferService
     {
-        public readonly IJobOfferRepository _jobOfferRepository;
+        public readonly IUnitOfWork _dbContext;
 
-        public JobOfferService(IJobOfferRepository jobOfferRepository) => _jobOfferRepository = jobOfferRepository;
+        public JobOfferService(IUnitOfWork dbContext) => _dbContext = dbContext;
 
         public async Task<int> Create(
             JobOffer jobOffer,
@@ -31,12 +31,12 @@ namespace JobChannel.BLL.Services.JobOfferServices
             jobOffer.City = cityTask/*.Result*/;
             jobOffer.Contract = contractTask/*.Result*/;
 
-            return await _jobOfferRepository.CreateJobOffer(jobOffer);
+            return await _dbContext.JobOfferRepository.CreateJobOffer(jobOffer);
         }
 
-        public Task<IEnumerable<JobOffer>> GetAll()
+        public async Task<IEnumerable<JobOffer>> GetAll(IReadOnlyDictionary<string, dynamic>? searchFields)
         {
-            return _jobOfferRepository.GetJobOffers();
+            return await _dbContext.JobOfferRepository.GetJobOffers(searchFields);
         }
 
         public Task<JobOffer> GetById(int id)
@@ -46,12 +46,12 @@ namespace JobChannel.BLL.Services.JobOfferServices
 
         public Task<int> Update(JobOffer jobOffer)
         {
-            return _jobOfferRepository.UpdateJobOffer(jobOffer);
+            return _dbContext.JobOfferRepository.UpdateJobOffer(jobOffer);
         }
 
         public Task<int> Delete(int id)
         {
-            return _jobOfferRepository.DeleteJobOffer(id);
+            return _dbContext.JobOfferRepository.DeleteJobOffer(id);
         }
     }
 }
