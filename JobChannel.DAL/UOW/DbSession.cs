@@ -1,13 +1,15 @@
-﻿using System.Data.Common;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System;
 using Microsoft.Extensions.Configuration;
+using System.Data;
 
 namespace JobChannel.DAL.UOW
 {
     public class DbSession : IDbSession
     {
-        public DbConnection Connection { get; private set; }
+        public IDbConnection Connection { get; private set; }
+
+        public IDbTransaction? Transaction { get; set; }
 
         public DbSession(IConfiguration configuration)
         {

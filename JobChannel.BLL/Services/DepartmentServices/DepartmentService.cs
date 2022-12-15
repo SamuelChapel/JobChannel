@@ -1,4 +1,4 @@
-﻿using JobChannel.DAL.UOW.Repositories.DepartmentRepositories;
+﻿using JobChannel.DAL.UOW;
 using JobChannel.Domain.BO;
 using JobChannel.Domain.DTO;
 using System.Collections.Generic;
@@ -8,15 +8,15 @@ namespace JobChannel.BLL.Services.DepartmentServices
 {
     public class DepartmentService : IDepartmentService
     {
-        public readonly IDepartmentRepository _departmentRepository;
+        public readonly IUnitOfWork _dbContext;
 
-        public DepartmentService(IDepartmentRepository departmentRepository) 
-            => _departmentRepository = departmentRepository;
+        public DepartmentService(IUnitOfWork dbContext) 
+            => _dbContext = dbContext;
 
         public async Task<IEnumerable<Department>> GetAllDepartments() 
-            => await _departmentRepository.GetAllDepartments();
+            => await _dbContext.DepartmentRepository.GetAllDepartments();
 
         public async Task<IEnumerable<DepartmentGetResponse>?> GetDepartmentsByRegionId(int regionId) 
-            => await _departmentRepository.GetDepartmentsByRegionId(regionId);
+            => await _dbContext.DepartmentRepository.GetDepartmentsByRegionId(regionId);
     }
 }

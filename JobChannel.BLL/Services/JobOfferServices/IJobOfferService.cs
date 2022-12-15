@@ -9,7 +9,7 @@ namespace JobChannel.BLL.Services.JobOfferServices
 {
     public interface IJobOfferService
     {
-        public Task<IEnumerable<JobOffer>> GetAll();
+        public Task<IEnumerable<JobOffer>> GetAll(IReadOnlyDictionary<string, dynamic>? searchFields);
         public Task<JobOffer> GetById(int id);
         public Task<int> Create(
             JobOffer request,

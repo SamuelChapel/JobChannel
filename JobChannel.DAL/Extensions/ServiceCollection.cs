@@ -18,13 +18,14 @@ namespace JobChannel.DAL.Extensions
     {
         public static IServiceCollection AddDALServices(this IServiceCollection services)
         {
-            services.AddScoped<ICityRepository, CityRepository>();
-            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            services.AddScoped<IRegionRepository, RegionRepository>();
-            services.AddScoped<IContractRepository, ContractRepository>();
-            services.AddScoped<IJobRepository, JobRepository>();
-            services.AddScoped<IJobOfferRepository, JobOfferRepository>();
+            //services.AddScoped<ICityRepository, CityRepository>();
+            //services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //services.AddScoped<IRegionRepository, RegionRepository>();
+            //services.AddScoped<IContractRepository, ContractRepository>();
+            //services.AddScoped<IJobRepository, JobRepository>();
+            //services.AddScoped<IJobOfferRepository, JobOfferRepository>();
             services.AddScoped<IDbSession, DbSession>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

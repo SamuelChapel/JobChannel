@@ -6,7 +6,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 {
     public interface IJobOfferRepository
     {
-        Task<IEnumerable<JobOffer>> GetJobOffers();
+        Task<IEnumerable<JobOffer>> GetJobOffers(IReadOnlyDictionary<string, dynamic>? searchFields);
 
         Task<int> CreateJobOffer(JobOffer request);
 

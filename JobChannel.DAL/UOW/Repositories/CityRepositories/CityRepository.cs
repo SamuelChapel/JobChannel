@@ -15,9 +15,9 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
         public async Task<IEnumerable<City>> GetAllCities()
         {
             string query = @"SELECT c.Id, c.Name, c.Code, d.Id, d.Code, d.Name, r.Id, r.Code, r.Name
-                            JOIN Department d ON d.Id = c.Id_Department
-                            JOIN Region r ON r.Id = d.Id_Region
-                            FROM JobChannel.City c";
+                             FROM JobChannel.City c
+                             JOIN Department d ON d.Id = c.Id_Department
+                             JOIN Region r ON r.Id = d.Id_Region";
 
             return await _dbSession.Connection.QueryAsync<City>(query);
         }

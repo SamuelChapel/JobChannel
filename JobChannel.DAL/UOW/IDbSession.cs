@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Data.Common;
+using System.Data;
 
 namespace JobChannel.DAL.UOW
 {
     public interface IDbSession : IDisposable
     {
-        public DbConnection Connection { get; }
+        public IDbConnection Connection { get; }
+
+        public IDbTransaction? Transaction { get; set; }
     }
 }
