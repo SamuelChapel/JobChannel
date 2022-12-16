@@ -13,6 +13,7 @@ namespace JobChannel.BLL.Services.RegionServices
 
         public RegionService(IUnitOfWork dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<Region>> GetAllRegions() => await _dbContext.RegionRepository.GetAllRegions();
+        public async Task<IEnumerable<Region>> GetAll() => await _dbContext.RegionRepository.GetAll();
+        public async Task<Region?> GetById(int id) => await _dbContext.RegionRepository.GetById(id);
     }
 }

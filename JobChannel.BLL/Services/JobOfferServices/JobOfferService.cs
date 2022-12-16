@@ -31,12 +31,12 @@ namespace JobChannel.BLL.Services.JobOfferServices
             jobOffer.City = cityTask/*.Result*/;
             jobOffer.Contract = contractTask/*.Result*/;
 
-            return await _dbContext.JobOfferRepository.CreateJobOffer(jobOffer);
+            return await _dbContext.JobOfferRepository.Create(jobOffer);
         }
 
         public async Task<IEnumerable<JobOffer>> GetAll(IReadOnlyDictionary<string, dynamic>? searchFields)
         {
-            return await _dbContext.JobOfferRepository.GetJobOffers(searchFields);
+            return await _dbContext.JobOfferRepository.GetAll(searchFields);
         }
 
         public Task<JobOffer> GetById(int id)
@@ -46,12 +46,12 @@ namespace JobChannel.BLL.Services.JobOfferServices
 
         public Task<int> Update(JobOffer jobOffer)
         {
-            return _dbContext.JobOfferRepository.UpdateJobOffer(jobOffer);
+            return _dbContext.JobOfferRepository.Update(jobOffer);
         }
 
         public Task<int> Delete(int id)
         {
-            return _dbContext.JobOfferRepository.DeleteJobOffer(id);
+            return _dbContext.JobOfferRepository.Delete(id);
         }
     }
 }

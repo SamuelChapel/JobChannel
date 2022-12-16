@@ -12,7 +12,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 
         public CityRepository(IDbSession dbSession) => _dbSession = dbSession;
 
-        public async Task<IEnumerable<City>> GetAllCities()
+        public async Task<IEnumerable<City>> GetAll()
         {
             string query = @"SELECT c.Id, c.Name, c.Code, d.Id, d.Code, d.Name, r.Id, r.Code, r.Name
                              FROM JobChannel.City c
@@ -22,7 +22,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
             return await _dbSession.Connection.QueryAsync<City>(query);
         }
 
-        public async Task<IEnumerable<City>?> GetCitiesByDepartmentId(int departmentId)
+        public async Task<IEnumerable<City>> GetCitiesByDepartmentId(int departmentId)
         {
             string query = @"SELECT c.Id, c.Name, c.Code, d.Id, d.Code, d.Name, r.Id, r.Code, r.Name
                             FROM JobChannel.City c
@@ -33,7 +33,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
             return await _dbSession.Connection.QueryAsync<City>(query, new { departmentId });
         }
 
-        public async Task<City> GetCityById(int id)
+        public async Task<City?> GetById(int id)
         {
             string query = @"SELECT c.Id, c.Name, c.Code, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
                             FROM JobChannel.City c

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using FluentValidation;
 using JobChannel.BLL.Services.CityServices;
 using JobChannel.BLL.Services.ContractServices;
 using JobChannel.BLL.Services.JobOfferServices;
@@ -38,9 +38,10 @@ namespace JobChannel.API.Controllers
             JobOfferCreateRequest jobOfferCreateRequest,
             [FromServices] IJobService jobService,
             [FromServices] ICityService cityService,
-            [FromServices] IContractService contractService)
+            [FromServices] IContractService contractService,
+            [FromServices] IValidator<JobOfferCreateRequest> validator)
         {
-            var validationResult = new JobOfferCreateRequestValidator().Validate(jobOfferCreateRequest);
+            var validationResult = await validator.ValidateAsync(jobOfferCreateRequest);
 
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.ToDictionary());
@@ -66,12 +67,10 @@ namespace JobChannel.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(
             [FromRoute] int id,
-            [FromBody] JobOfferUpdateRequest jobOfferUpdateRequest)
+            [FromBody] JobOfferUpdateRequest jobOfferUpdateRequest,
+            [FromServices] IValidator<JobOfferUpdateRequest> validator)
         {
-            var validationResult = new JobOfferUpdateRequestValidator().Validate(jobOfferUpdateRequest);
-
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.ToDictionary());
+            await validator.ValidateAndThrowAsync(jobOfferUpdateRequest);
 
             JobOffer jobOffer = new()
             {
