@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 
 namespace JobChannel.BLL.Services.DepartmentServices
 {
-    public class DepartmentService : IDepartmentService
+    internal class DepartmentService : IDepartmentService
     {
         public readonly IUnitOfWork _dbContext;
 
         public DepartmentService(IUnitOfWork dbContext) 
             => _dbContext = dbContext;
 
-        public async Task<IEnumerable<Department>> GetAllDepartments() 
-            => await _dbContext.DepartmentRepository.GetAllDepartments();
+        public async Task<IEnumerable<Department>> GetAll() 
+            => await _dbContext.DepartmentRepository.GetAll();
+
+        public async Task<Department?> GetById(int id) 
+            => await _dbContext.DepartmentRepository.GetById(id);
 
         public async Task<IEnumerable<DepartmentGetResponse>?> GetDepartmentsByRegionId(int regionId) 
             => await _dbContext.DepartmentRepository.GetDepartmentsByRegionId(regionId);

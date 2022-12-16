@@ -12,12 +12,21 @@ namespace JobChannel.DAL.UOW.Repositories.DepartmentRepositories
 
         public DepartmentRepository(IDbSession dbSession) => _dbSession = dbSession;
 
-        public async Task<IEnumerable<Department>> GetAllDepartments()
+        public async Task<IEnumerable<Department>> GetAll()
         {
             string query = @"SELECT d.Id, d.Name, d.Code
                             FROM JobChannel.Department d";
 
             return await _dbSession.Connection.QueryAsync<Department>(query);
+        }
+
+        public async Task<Department?> GetById(int id)
+        {
+            string query = @"SELECT d.Id, d.Name, d.Code
+                            FROM JobChannel.Department d
+                            WHERE d.Id = @Id";
+
+            return await _dbSession.Connection.QueryFirstOrDefaultAsync<Department>(query, new { id });
         }
 
         public async Task<IEnumerable<DepartmentGetResponse>?> GetDepartmentsByRegionId(int regionId)

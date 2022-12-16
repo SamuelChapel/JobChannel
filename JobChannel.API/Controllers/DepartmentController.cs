@@ -15,7 +15,7 @@ namespace JobChannel.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _departmentService.GetAllDepartments());
+            return Ok(await _departmentService.GetAll());
         }
 
         [HttpGet("{id}")]

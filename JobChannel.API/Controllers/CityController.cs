@@ -1,6 +1,4 @@
-﻿using JobChannel.BLL.Services.DepartmentServices;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using JobChannel.BLL.Services.CityServices;
 
@@ -17,7 +15,7 @@ namespace JobChannel.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _cityService.GetAllCities());
+            return Ok(await _cityService.GetAll());
         }
 
         [HttpGet("Department/{id}")]

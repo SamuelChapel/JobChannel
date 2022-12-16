@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace JobChannel.API.Extensions
+namespace JobChannel.Domain.Extensions
 {
     public static class ServiceCollection
     {
-        public static IServiceCollection AddApiServices(this IServiceCollection services)
+        public static IServiceCollection AddValidators(this IServiceCollection services)
         {
-
 
             return services;
         }

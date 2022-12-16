@@ -11,7 +11,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobRepositories
 
         public JobRepository(IDbSession dbSession) => _dbSession = dbSession;
 
-        public async Task<IEnumerable<Job>> GetAllJob()
+        public async Task<IEnumerable<Job>> GetAll()
         {
             string query = @"SELECT j.Id, j.Name, j.CodeRome
                             FROM JobChannel.Job j";
@@ -19,7 +19,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobRepositories
             return await _dbSession.Connection.QueryAsync<Job>(query);
         }
 
-        public async Task<Job?> GetJobById(int id)
+        public async Task<Job?> GetById(int id)
         {
             string query = @"SELECT j.Id, j.Name, j.CodeRome
                             FROM JobChannel.Job j

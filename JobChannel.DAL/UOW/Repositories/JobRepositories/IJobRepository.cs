@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using JobChannel.DAL.UOW.Repositories.Base;
 using JobChannel.Domain.BO;
 
 namespace JobChannel.DAL.UOW.Repositories.JobRepositories
 {
-    public interface IJobRepository
+    public interface IJobRepository : IGenericReadRepository<Job, int>
     {
-        Task<IEnumerable<Job>> GetAllJob();
-
-        Task<Job?> GetJobById(int id);
     }
 }

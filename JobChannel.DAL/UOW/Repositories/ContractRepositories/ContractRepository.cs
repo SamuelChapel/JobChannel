@@ -11,7 +11,7 @@ namespace JobChannel.DAL.UOW.Repositories.ContractRepositories
 
         public ContractRepository(IDbSession dbSession) => _dbSession = dbSession;
 
-        public async Task<IEnumerable<Contract>> GetAllContracts()
+        public async Task<IEnumerable<Contract>> GetAll()
         {
             string query = @"SELECT c.Id, c.Name, c.Code
                             FROM JobChannel.Contract c";

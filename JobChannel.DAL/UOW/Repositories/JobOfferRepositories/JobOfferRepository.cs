@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using JobChannel.DAL.UOW.Repositories.Base;
 using JobChannel.Domain.BO;
-using JobChannel.Domain.DTO;
 
 namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 {
@@ -13,7 +13,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 
         public JobOfferRepository(IDbSession dbSession) => _dbSession = dbSession;
 
-        public async Task<IEnumerable<JobOffer>> GetJobOffers(IReadOnlyDictionary<string, dynamic>? searchFields)
+        public async Task<IEnumerable<JobOffer>> GetAll(IReadOnlyDictionary<string, dynamic>? searchFields)
         {
             string query = @"SELECT jo.Id, jo.Title, jo.Description, jo.PublicationDate, jo.ModificationDate,
                             jo.Url, jo.Salary, jo.Experience, jo.Company, j.Id, j.Name, j.CodeRome, c.Id, c.Name,
@@ -36,7 +36,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                 jobOffer.City.Department.Region = region;
                 jobOffer.Contract = contract;
                 return jobOffer;
-            });
+            }, _dbSession.Transaction);
 
             return jobOffers.GroupBy(jo => jo.Id).Select(g =>
             {
@@ -46,7 +46,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             });
         }
 
-        public async Task<int> CreateJobOffer(JobOffer jobOffer)
+        public async Task<int> Create(JobOffer jobOffer)
         {
             string query = @"INSERT INTO JobChannel.JobOffer (Title, Description, PublicationDate, ModificationDate, 
                              Url, Salary, Experience, Id_Job, ID_Contract, Id_City)
@@ -62,7 +62,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             return await _dbSession.Connection.ExecuteAsync(query, param);
         }
 
-        public async Task<int> UpdateJobOffer(JobOffer jobOffer)
+        public async Task<int> Update(JobOffer jobOffer)
         {
             string query = @"UPDATE JobChannel.JobOffer
                             SET Title = @Title, Description = @Description, PublicationDate = @PublicationDate, 
@@ -78,7 +78,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             return await _dbSession.Connection.ExecuteAsync(query, param);
         }
 
-        public async Task<int> DeleteJobOffer(int id)
+        public async Task<int> Delete(int id)
         {
             string query = @"DELETE FROM JobChannel.JobOffer
                              WHERE Id = @id";

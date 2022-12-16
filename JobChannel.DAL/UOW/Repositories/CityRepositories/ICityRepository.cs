@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using JobChannel.DAL.UOW.Repositories.Base;
 using JobChannel.Domain.BO;
-using JobChannel.Domain.DTO;
 
 namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 {
-    public interface ICityRepository
+    public interface ICityRepository : IGenericReadRepository<City, int>
     {
-        Task<IEnumerable<City>> GetAllCities();
-
-        Task<IEnumerable<City>?> GetCitiesByDepartmentId(int departmentId);
-
-        Task<City> GetCityById(int id);
+        Task<IEnumerable<City>> GetCitiesByDepartmentId(int departmentId);
     }
 }
