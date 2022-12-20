@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using JobChannel.Domain.BO;
 using JobChannel.Domain.DTO;
+using JobChannel.Domain.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,13 +21,13 @@ namespace JobChannel.DAL.UOW.Repositories.DepartmentRepositories
             return await _dbSession.Connection.QueryAsync<Department>(query);
         }
 
-        public async Task<Department?> GetById(int id)
+        public async Task<Department> GetById(int id)
         {
             string query = @"SELECT d.Id, d.Name, d.Code
                             FROM JobChannel.Department d
                             WHERE d.Id = @Id";
 
-            return await _dbSession.Connection.QueryFirstOrDefaultAsync<Department>(query, new { id });
+            return (await _dbSession.Connection.QueryFirstOrDefaultAsync<Department>(query, new { id })) ?? throw new DepartmentNotFoundException();
         }
 
         public async Task<IEnumerable<DepartmentGetResponse>?> GetDepartmentsByRegionId(int regionId)

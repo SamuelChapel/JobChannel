@@ -16,7 +16,7 @@ namespace JobChannel.BLL.Services.DepartmentServices
         public async Task<IEnumerable<Department>> GetAll() 
             => await _dbContext.DepartmentRepository.GetAll();
 
-        public async Task<Department?> GetById(int id) 
+        public async Task<Department> GetById(int id) 
             => await _dbContext.DepartmentRepository.GetById(id);
 
         public async Task<IEnumerable<DepartmentGetResponse>?> GetDepartmentsByRegionId(int regionId) 

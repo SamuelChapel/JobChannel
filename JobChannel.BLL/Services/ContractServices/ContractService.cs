@@ -14,7 +14,7 @@ namespace JobChannel.BLL.Services.ContractServices
 
         public async Task<IEnumerable<Contract>> GetAll() => await _dbContext.ContractRepository.GetAll();
 
-        public async Task<Contract?> GetById(int id) 
+        public async Task<Contract> GetById(int id) 
             => await _dbContext.ContractRepository.GetById(id) ?? throw new ContractNotFoundException();
     }
 }

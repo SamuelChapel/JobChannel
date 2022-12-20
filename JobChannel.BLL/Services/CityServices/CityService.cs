@@ -18,7 +18,7 @@ namespace JobChannel.BLL.Services.CityServices
         public async Task<IEnumerable<City>?> GetCitiesByDepartmentId(int departmentId) 
             => await _dbContext.CityRepository.GetCitiesByDepartmentId(departmentId);
 
-        public async Task<City?> GetById(int id)
+        public async Task<City> GetById(int id)
             => await _dbContext.CityRepository.GetById(id) ?? throw new CityNotFoundException();
     }
 }

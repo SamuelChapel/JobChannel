@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using JobChannel.BLL.Services.JobServices;
+using JobChannel.Domain.BO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobChannel.API.Controllers
@@ -13,15 +15,15 @@ namespace JobChannel.API.Controllers
         public JobController(IJobService jobService) => _jobService = jobService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IEnumerable<Job>> GetAll()
         {
-            return Ok(await _jobService.GetAll());
+            return await _jobService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<Job?> GetById(int id)
         {
-            return Ok(await _jobService.GetById(id));
+            return await _jobService.GetById(id);
         }
     }
 }

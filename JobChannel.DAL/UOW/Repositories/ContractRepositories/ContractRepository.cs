@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Dapper;
 using JobChannel.Domain.BO;
+using JobChannel.Domain.Exceptions;
 
 namespace JobChannel.DAL.UOW.Repositories.ContractRepositories
 {
@@ -19,13 +20,13 @@ namespace JobChannel.DAL.UOW.Repositories.ContractRepositories
             return await _dbSession.Connection.QueryAsync<Contract>(query);
         }
 
-        public async Task<Contract?> GetById(int id)
+        public async Task<Contract> GetById(int id)
         {
             string query = @"SELECT c.Id, c.Name, c.Code
                             FROM JobChannel.Contract c
                             WHERE c.Id = @id";
 
-            return await _dbSession.Connection.QueryFirstOrDefaultAsync<Contract>(query, new { id });
+            return (await _dbSession.Connection.QueryFirstOrDefaultAsync<Contract>(query, new { id })) ?? throw new ContractNotFoundException();
         }
     }
 }
