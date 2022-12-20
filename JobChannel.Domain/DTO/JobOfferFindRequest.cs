@@ -1,12 +1,14 @@
-﻿namespace JobChannel.Domain.DTO
+﻿using System;
+
+namespace JobChannel.Domain.DTO
 {
-    public record JobOfferFindRequest
-    {
-        public int? Id_Region { get; set; }
-        public int? Id_Department { get; set; }
-        public int? Id_City { get; set; }
-        public int? Id_Job { get; set; }
-        public int? Id_Contract { get; set; }
-        public string? SearchString { get; set; }
-    }
+    public record JobOfferFindRequest(
+        int? Id_Region,
+        int? Id_Department,
+        int? Id_City,
+        int? Id_Job,
+        int? Id_Contract,
+        DateTime? PublicationDate,
+        string? SearchString
+    );
 }

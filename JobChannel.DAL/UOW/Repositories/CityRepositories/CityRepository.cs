@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using JobChannel.Domain.BO;
+using JobChannel.Domain.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
             return await _dbSession.Connection.QueryAsync<City>(query, new { departmentId });
         }
 
-        public async Task<City?> GetById(int id)
+        public async Task<City> GetById(int id)
         {
             string query = @"SELECT c.Id, c.Name, c.Code, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
                             FROM JobChannel.City c
@@ -54,7 +55,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
             var groupedCity = g.First();
             groupedCity.Postcodes = g.Select(c => c.Postcodes.Single()).ToList();
             return groupedCity;
-        }).Single();
+        }).Single() ?? throw new CityNotFoundException();
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using JobChannel.Domain.BO;
+using JobChannel.Domain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,13 +21,15 @@ namespace JobChannel.DAL.UOW.Repositories.JobRepositories
             return await _dbSession.Connection.QueryAsync<Job>(query);
         }
 
-        public async Task<Job?> GetById(int id)
+        public async Task<Job> GetById(int id)
         {
             string query = @"SELECT j.Id, j.Name, j.CodeRome
                             FROM JobChannel.Job j
                             WHERE Id = @id";
+            var job = (await _dbSession.Connection.QueryFirstOrDefaultAsync<Job>(query, new { id })) ?? 
+                throw new JobNotFoundException();
 
-            return await _dbSession.Connection.QueryFirstOrDefaultAsync<Job>(query, new { id });
+            return job;
         }
     }
 }

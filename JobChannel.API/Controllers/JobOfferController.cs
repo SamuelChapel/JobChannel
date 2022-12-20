@@ -28,8 +28,16 @@ namespace JobChannel.API.Controllers
         [HttpPost("search")]
         public async Task<IActionResult> Find([FromBody] JobOfferFindRequest jobOfferFindRequest)
         {
-            IReadOnlyDictionary<string, dynamic> keyValuePairs;
-                //if(jobOfferFindRequest.Id_City.HasValue) keyValuePairs
+            var keyValuePairs = new Dictionary<string, dynamic>();
+
+            if (jobOfferFindRequest.Id_City.HasValue) keyValuePairs.Add("Id_City", jobOfferFindRequest.Id_City);
+            if(jobOfferFindRequest.Id_Department.HasValue) keyValuePairs.Add("Id_Department", jobOfferFindRequest.Id_Department);
+            if (jobOfferFindRequest.Id_Region.HasValue) keyValuePairs.Add("Id_Region", jobOfferFindRequest.Id_Region);
+            if (jobOfferFindRequest.PublicationDate.HasValue) keyValuePairs.Add("PublicationDate", jobOfferFindRequest.PublicationDate);
+            if (jobOfferFindRequest.Id_Job.HasValue) keyValuePairs.Add("Id_Job", jobOfferFindRequest.Id_Job);
+            if (jobOfferFindRequest.Id_Contract.HasValue) keyValuePairs.Add("Id_Contract", jobOfferFindRequest.Id_Contract);
+            if (jobOfferFindRequest.SearchString?.Length > 0) keyValuePairs.Add("SearchString", jobOfferFindRequest.SearchString);
+
             return Ok(await _jobOfferService.GetAll(null));
         }
 
