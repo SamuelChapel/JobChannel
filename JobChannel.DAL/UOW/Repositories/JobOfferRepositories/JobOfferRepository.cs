@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -26,6 +27,47 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                             JOIN JobChannel.Region r ON r.Id = d.Id_Region
                             JOIN JobChannel.Contract ct ON ct.Id = jo.Id_Contract";
 
+            var parameters = new DynamicParameters();
+
+            if (searchFields != null)
+            {
+                bool first = true;
+                foreach (var field in searchFields)
+                {
+                    query += first ? " WHERE " : " AND ";
+                    first = false;
+
+                    var t = field.Value.GetType();
+                    query += field.Value switch
+                    {
+                        // TODO gérer la table dans l'enumerable
+                        IEnumerable<int> list => field.Key switch
+                        {
+                            "Id_Region" => $"r.Id",
+                            "Id_Department" => $"d.Id",
+                            _ => $"jo.{field.Key}"
+                        } + $" IN @{field.Key}",
+                        ValueTuple<DateTime, DateTime> d => $"jo.{field.Key} BETWEEN {d.Item1} AND {d.Item2}",
+                        string s => $"jo.Title COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key}",
+                                    //$"jo.Company COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
+                                    //$"c.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
+                                    //$"j.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
+                                    //$"d.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
+                                    //$"r.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
+                                    //$"ct.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key}",
+                        _ => throw new Exception()
+                    };
+
+                    // TODO gerer les tuple pour les params de dapper
+                    if (field.Value is ValueTuple<DateTime, DateTime> date)
+                    {
+                        parameters.Add(date.Item1.ToString(), date.Item1);
+                        parameters.Add(date.Item2.ToString(), date.Item2);
+                    }
+                    else parameters.Add(field.Key, field.Value);
+                }
+            }
+
             var jobOffers = await _dbSession.Connection.QueryAsync<JobOffer, Job, City, PostCode, Department, Region, Contract, JobOffer>(query, (jobOffer, job, city, postcode, department, region, contract) =>
             {
                 jobOffer.Job = job;
@@ -35,7 +77,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                 jobOffer.City.Department.Region = region;
                 jobOffer.Contract = contract;
                 return jobOffer;
-            }, _dbSession.Transaction);
+            }, parameters, _dbSession.Transaction);
 
             return jobOffers.GroupBy(jo => jo.Id).Select(g =>
             {

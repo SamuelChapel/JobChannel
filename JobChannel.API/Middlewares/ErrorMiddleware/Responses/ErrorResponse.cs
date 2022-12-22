@@ -10,7 +10,7 @@ namespace JobChannel.API.Middlewares.ErrorMiddleware.Responses
         public ErrorResponse(Exception exception)
         {
             ExceptionType = exception.GetType().FullName!;
-            Message = exception.Message;
+            Message = exception.ToString();
         }
     }
 }
