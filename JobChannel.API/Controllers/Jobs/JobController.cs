@@ -4,7 +4,7 @@ using JobChannel.BLL.Services.JobServices;
 using JobChannel.Domain.BO;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobChannel.API.Controllers
+namespace JobChannel.API.Controllers.Jobs
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,0 +1,37 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:5129",
+      "sslPort": 44370
+    }
+  },
+  "profiles": {
+    "JobChannel": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7203;http://localhost:5113",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "POLE_EMPLOI_CLIENT_ID": "PAR_jobchannel_6a45a0539110fd6d4bed061bf58e6779c35056e399531210fa201c738764bd60",
+        "POLE_EMPLOI_CLIENT_SECRET": "df89901879b6de5bf5ae63d38bc8fa7cd647c1675c43861fd8e635e13077b40a",
+        "POLE_EMPLOI_SCOPE": "api_romev1 api_offresdemploiv2 o2dsoffre nomenclatureRome",
+        "POLE_EMPLOI_TOKEN_VALID_TIME_BEFORE_EXPIRATION": "15",
+        "POLE_EMPLOI_CREDENTIAL_URL": "https://entreprise.pole-emploi.fr/connexion/oauth2/access_token?realm=/partenaire",
+        "POLE_EMPLOI_API_BASE_URL": "https://api.pole-emploi.io/partenaire/"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

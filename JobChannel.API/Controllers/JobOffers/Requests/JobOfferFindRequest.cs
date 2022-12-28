@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using JobChannel.Domain.Contracts;
 
-namespace JobChannel.Domain.DTO
+namespace JobChannel.API.Controllers.JobOffers.Requests
 {
     public record JobOfferFindRequest(
         IEnumerable<int>? Id_Region,
@@ -14,7 +15,7 @@ namespace JobChannel.Domain.DTO
         DateTime? StartDate,
         DateTime? EndDate,
         string? SearchString
-    );
+    ) : IRequest;
 
     public class JobOfferFindRequestValidator : AbstractValidator<JobOfferFindRequest>
     {

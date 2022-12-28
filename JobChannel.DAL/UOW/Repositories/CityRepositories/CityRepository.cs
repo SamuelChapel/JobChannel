@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using JobChannel.DAL.Services.SqlQueryBuilder;
 using JobChannel.Domain.BO;
 using JobChannel.Domain.Exceptions;
 using System.Collections.Generic;
@@ -15,47 +16,74 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 
         public async Task<IEnumerable<City>> GetAll()
         {
-            string query = @"SELECT c.Id, c.Name, c.Code, d.Id, d.Code, d.Name, r.Id, r.Code, r.Name
-                             FROM JobChannel.City c
-                             JOIN Department d ON d.Id = c.Id_Department
-                             JOIN Region r ON r.Id = d.Id_Region";
+            var cityQuery = new SqlSelectBuilder(
+                "c.Id, c.Name",
+                "JobChannel.City AS c");
 
-            return await _dbSession.Connection.QueryAsync<City>(query);
+            return await cityQuery.QueryAsync<City>(_dbSession.Connection);
         }
 
         public async Task<IEnumerable<City>> GetCitiesByDepartmentId(int departmentId)
         {
-            string query = @"SELECT c.Id, c.Name, c.Code, d.Id, d.Code, d.Name, r.Id, r.Code, r.Name
-                            FROM JobChannel.City c
-                            JOIN JobChannel.Department d ON d.Id = c.Id_Department
-                            JOIN JobChannel.Region r ON r.Id = d.Id_Region
-                            WHERE c.Id_Department = @departmentId";
+            var cityQuery = new SqlSelectBuilder(
+                "c.Id, c.Name",
+                "JobChannel.City AS c");
 
-            return await _dbSession.Connection.QueryAsync<City>(query, new { departmentId });
+            return await cityQuery.LeftJoin("JobChannel.Department d", "d.Id = c.Id_Department")
+                                  .Where("c.Id_Department = @departmentId", departmentId)
+                                  .QueryAsync<City>(_dbSession.Connection);
         }
 
         public async Task<City> GetById(int id)
         {
-            string query = @"SELECT c.Id, c.Name, c.Code, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
+            string query = @"SELECT c.Id, c.Name, c.Code, c.Population, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
                             FROM JobChannel.City c
                             JOIN JobChannel.CityPostcode cpc ON cpc.Id_City = c.Id
                             JOIN JobChannel.Department d ON d.Id = c.Id_Department
                             JOIN JobChannel.Region r ON r.Id = d.Id_Region
                             WHERE c.Id = @id";
 
-            return (await _dbSession.Connection.QueryAsync<City, PostCode, Department, Region, City>(query, (city, postcode, department, region) =>
+            var cities = await _dbSession.Connection.QueryAsync<City, PostCode, Department, Region, City>(query, (city, postcode, department, region) =>
             {
                 city.Department = department;
                 city.Department.Region = region;
                 city.Postcodes.Add(postcode.Postcode);
                 return city;
             },
-        param: new { id })).GroupBy(c => c.Id).Select(g =>
-        {
-            var groupedCity = g.First();
-            groupedCity.Postcodes = g.Select(c => c.Postcodes.Single()).ToList();
-            return groupedCity;
-        }).Single() ?? throw new CityNotFoundException();
+            param: new { id });
+
+            if (!cities.Any())
+                throw new CityNotFoundException(id);
+
+            return cities.GroupBy(c => c.Id).Select(g =>
+            {
+                var groupedCity = g.First();
+                groupedCity.Postcodes = g.Select(c => c.Postcodes.First()).ToList();
+                return groupedCity;
+            }).Single();
         }
+
+        public async Task<City> GetByPostCode(string postCode)
+        {
+            string query = @"SELECT c.Id, c.Name, c.Code, c.Population, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
+                            FROM JobChannel.City c
+                            JOIN JobChannel.CityPostcode cpc ON cpc.Id_City = c.Id
+                            JOIN JobChannel.Department d ON d.Id = c.Id_Department
+                            JOIN JobChannel.Region r ON r.Id = d.Id_Region
+                            WHERE cpc.Postcode = @postCode";
+
+            var cities = await _dbSession.Connection.QueryAsync<City, PostCode, Department, Region, City>(query, (city, postcode, department, region) =>
+            {
+                city.Department = department;
+                city.Department.Region = region;
+                city.Postcodes.Add(postcode.Postcode);
+                return city;
+            },
+            param: new { postCode });
+
+            return cities.First();
+        }
+
+
     }
 }

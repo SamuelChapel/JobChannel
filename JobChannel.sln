@@ -22,9 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobChannel.BLL", "JobChanne
 		{2A6BA4E0-16B0-440F-A674-EE9DD434E2A7} = {2A6BA4E0-16B0-440F-A674-EE9DD434E2A7}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobChannel.Tests.Units", "JobChannel.Tests.Units\JobChannel.Tests.Units.csproj", "{251F68A3-B8E2-4E2A-AA5C-93FBACC6095B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobChannel.Tests.Units", "JobChannel.Tests.Units\JobChannel.Tests.Units.csproj", "{251F68A3-B8E2-4E2A-AA5C-93FBACC6095B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobChannel.Tests.Integrations", "JobChannel.Tests.Integrations\JobChannel.Tests.Integrations.csproj", "{5635B390-4708-45D6-A0C7-FBB9E3AE17BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobChannel.Tests.Integrations", "JobChannel.Tests.Integrations\JobChannel.Tests.Integrations.csproj", "{5635B390-4708-45D6-A0C7-FBB9E3AE17BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

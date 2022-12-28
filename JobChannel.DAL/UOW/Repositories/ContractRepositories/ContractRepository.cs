@@ -26,7 +26,16 @@ namespace JobChannel.DAL.UOW.Repositories.ContractRepositories
                             FROM JobChannel.Contract c
                             WHERE c.Id = @id";
 
-            return (await _dbSession.Connection.QueryFirstOrDefaultAsync<Contract>(query, new { id })) ?? throw new ContractNotFoundException();
+            return (await _dbSession.Connection.QueryFirstOrDefaultAsync<Contract>(query, new { id })) ?? throw new ContractNotFoundException(id);
+        }
+
+        public async Task<Contract> GetByCode(string code)
+        {
+            string query = @"SELECT c.Id, c.Name, c.Code
+                            FROM JobChannel.Contract c
+                            WHERE c.Code = @code";
+
+            return (await _dbSession.Connection.QueryFirstOrDefaultAsync<Contract>(query, new { code }));
         }
     }
 }

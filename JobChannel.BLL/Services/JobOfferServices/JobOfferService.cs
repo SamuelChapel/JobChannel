@@ -21,37 +21,23 @@ namespace JobChannel.BLL.Services.JobOfferServices
             ICityService cityService,
             IContractService contractService)
         {
-            var jobTask = await jobService.GetById(jobOffer.Job.Id);
-            var cityTask = await cityService.GetById(jobOffer.City.Id);
-            var contractTask = await contractService.GetById(jobOffer.Contract.Id);
-
-            //await Task.WhenAll(jobTask, cityTask, contractTask);
-
-            jobOffer.Job = jobTask/*.Result*/;
-            jobOffer.City = cityTask/*.Result*/;
-            jobOffer.Contract = contractTask/*.Result*/;
+            jobOffer.Job = await jobService.GetById(jobOffer.Job.Id);
+            jobOffer.City = await cityService.GetById(jobOffer.City.Id);
+            jobOffer.Contract = await contractService.GetById(jobOffer.Contract.Id);
 
             return await _dbContext.JobOfferRepository.Create(jobOffer);
         }
 
-        public async Task<IEnumerable<JobOffer>> GetAll(IReadOnlyDictionary<string, dynamic>? searchFields)
-        {
-            return await _dbContext.JobOfferRepository.GetAll(searchFields);
-        }
+        public async Task<IEnumerable<JobOffer>> GetAll(IReadOnlyDictionary<string, dynamic>? searchFields) 
+            => await _dbContext.JobOfferRepository.GetAll(searchFields);
 
-        public Task<JobOffer> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<JobOffer> GetById(int id) 
+            => await _dbContext.JobOfferRepository.GetById(id);
 
-        public Task<int> Update(JobOffer jobOffer)
-        {
-            return _dbContext.JobOfferRepository.Update(jobOffer);
-        }
+        public Task<int> Update(JobOffer jobOffer) 
+            => _dbContext.JobOfferRepository.Update(jobOffer);
 
-        public Task<int> Delete(int id)
-        {
-            return _dbContext.JobOfferRepository.Delete(id);
-        }
+        public Task<int> Delete(int id) 
+            => _dbContext.JobOfferRepository.Delete(id);
     }
 }

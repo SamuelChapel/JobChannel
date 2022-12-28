@@ -1,6 +1,5 @@
 ﻿using JobChannel.DAL.UOW;
 using JobChannel.Domain.BO;
-using JobChannel.Domain.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,7 +18,7 @@ namespace JobChannel.BLL.Services.DepartmentServices
         public async Task<Department> GetById(int id) 
             => await _dbContext.DepartmentRepository.GetById(id);
 
-        public async Task<IEnumerable<DepartmentGetResponse>?> GetDepartmentsByRegionId(int regionId) 
+        public async Task<IEnumerable<Department>> GetDepartmentsByRegionId(int regionId) 
             => await _dbContext.DepartmentRepository.GetDepartmentsByRegionId(regionId);
     }
 }

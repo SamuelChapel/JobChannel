@@ -22,6 +22,9 @@ namespace JobChannel.BLL.Validation
             AddTranslation("fr", "IdCitiesInvalid", "Les villes doivent avoir une Id supérieures à 0");
             AddTranslation("fr", "IdJobsInvalid", "Les métiers doivent avoir une Id supérieures à 0");
             AddTranslation("fr", "IdContractsInvalid", "Les contrats doivent avoir une Id supérieures à 0");
+            AddTranslation("fr", "JobNotInDB", "Le nom du code rome doit exister dans la base de donnée");
+            AddTranslation("fr", "UrlInvalid", "L'adresse url entré doit être une url valide");
+            AddTranslation("fr", "RangeInvalid", "L'interval entre les deux valeurs doit être compris entre 0 et 149");
         }
     }
 }

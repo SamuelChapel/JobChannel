@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using JobChannel.API.Middlewares.ErrorMiddleware.Responses;
 using JobChannel.BLL.Exceptions;
-using JobChannel.Domain.Exceptions;
+using JobChannel.Domain.Exceptions.Base;
 using Microsoft.AspNetCore.Http;
 
 namespace JobChannel.API.Middlewares.ErrorMiddleware
@@ -30,7 +30,7 @@ namespace JobChannel.API.Middlewares.ErrorMiddleware
         }
 
         private async Task HandleExceptionAsync(HttpContext context, Exception thrownException)
-        {
+    {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)GetHttpStatusCodeByException(thrownException);
 
@@ -51,6 +51,7 @@ namespace JobChannel.API.Middlewares.ErrorMiddleware
             return thrownException switch
             {
                 BadRequestException or ValidationException => HttpStatusCode.BadRequest,
+                NotFoundException => HttpStatusCode.NotFound,
                 UnauthorizedException => HttpStatusCode.Unauthorized,
                 _ => HttpStatusCode.InternalServerError
             };

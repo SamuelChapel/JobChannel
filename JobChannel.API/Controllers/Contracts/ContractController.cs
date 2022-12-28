@@ -2,7 +2,7 @@
 using JobChannel.BLL.Services.ContractServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobChannel.API.Controllers
+namespace JobChannel.API.Controllers.Contracts
 {
     [Route("api/[controller]")]
     [ApiController]

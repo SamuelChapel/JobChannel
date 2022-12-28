@@ -3,6 +3,7 @@ using JobChannel.BLL.Services.ContractServices;
 using JobChannel.BLL.Services.DepartmentServices;
 using JobChannel.BLL.Services.JobOfferServices;
 using JobChannel.BLL.Services.JobServices;
+using JobChannel.BLL.Services.PoleEmploi.JobOffers;
 using JobChannel.BLL.Services.RegionServices;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +19,7 @@ namespace JobChannel.BLL.Extensions
             services.AddScoped<IJobService, JobService>();
             services.AddScoped<IContractService, ContractService>();
             services.AddScoped<IJobOfferService, JobOfferService>();
+            services.AddScoped<IJobOfferPoleEmploiService, JobOfferPoleEmploiService>();
 
             return services;
         }

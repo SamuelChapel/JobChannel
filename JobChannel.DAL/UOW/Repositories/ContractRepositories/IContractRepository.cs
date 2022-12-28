@@ -7,5 +7,6 @@ namespace JobChannel.DAL.UOW.Repositories.ContractRepositories
 {
     public interface IContractRepository : IGenericReadRepository<Contract, int>
     {
+        Task<Contract> GetByCode(string code);
     }
 }

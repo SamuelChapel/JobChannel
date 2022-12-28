@@ -3,29 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
+using JobChannel.API.Controllers.Base;
+using JobChannel.API.Controllers.JobOffers.Requests;
 using JobChannel.BLL.Services.CityServices;
 using JobChannel.BLL.Services.ContractServices;
 using JobChannel.BLL.Services.JobOfferServices;
 using JobChannel.BLL.Services.JobServices;
+using JobChannel.BLL.Services.PoleEmploi.JobOffers;
+using JobChannel.DAL.ObjectExtensions;
+using JobChannel.DAL.UOW.Repositories.CityRepositories;
+using JobChannel.DAL.UOW.Repositories.ContractRepositories;
+using JobChannel.DAL.UOW.Repositories.JobOfferRepositories;
+using JobChannel.DAL.UOW.Repositories.JobRepositories;
 using JobChannel.Domain.BO;
-using JobChannel.Domain.DTO;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobChannel.API.Controllers
+namespace JobChannel.API.Controllers.JobOffers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class JobOfferController : ControllerBase
+    public class JobOfferController : ControllerBase, IGenericReadController<JobOffer, int, JobOfferFindRequest>
     {
         private readonly IJobOfferService _jobOfferService;
 
         public JobOfferController(IJobOfferService jobOfferService) => _jobOfferService = jobOfferService;
 
+        [HttpGet("{id}")]
+        public async Task<JobOffer> GetById(
+            [FromRoute] int id
+            ) 
+            => await _jobOfferService.GetById(id);
+
         [HttpPost("search")]
-        public async Task<IActionResult> Find(
-            [FromBody] JobOfferFindRequest jobOfferFindRequest
+        public async Task<IEnumerable<JobOffer>> Find(
+            [FromBody] JobOfferFindRequest jobOfferFindRequest,
+            [FromServices] IValidator<JobOfferFindRequest> validator
             )
         {
+            await validator.ValidateAndThrowAsync(jobOfferFindRequest);
+
             var filters = new Dictionary<string, dynamic>();
 
             if (jobOfferFindRequest.Id_City?.Count() > 0) filters.Add("Id_City", jobOfferFindRequest.Id_City);
@@ -34,9 +50,9 @@ namespace JobChannel.API.Controllers
             if (jobOfferFindRequest.StartDate.HasValue && jobOfferFindRequest.EndDate.HasValue) filters.Add("PublicationDate", new ValueTuple<DateTime, DateTime>((DateTime)jobOfferFindRequest.StartDate, (DateTime)jobOfferFindRequest.EndDate));
             if (jobOfferFindRequest.Id_Job?.Count() > 0) filters.Add("Id_Job", jobOfferFindRequest.Id_Job);
             if (jobOfferFindRequest.Id_Contract?.Count() > 0) filters.Add("Id_Contract", jobOfferFindRequest.Id_Contract);
-            if (jobOfferFindRequest.SearchString?.Length > 0) filters.Add("SearchString", jobOfferFindRequest.SearchString);
+            if (jobOfferFindRequest.SearchString?.Length > 0) filters.Add("SearchString", jobOfferFindRequest.SearchString.NormalizeAndRemoveDiacriticsAndToLower());
 
-            return Ok(await _jobOfferService.GetAll(filters));
+            return await _jobOfferService.GetAll(filters);
         }
 
         [HttpPost]
@@ -47,10 +63,7 @@ namespace JobChannel.API.Controllers
             [FromServices] IContractService contractService,
             [FromServices] IValidator<JobOfferCreateRequest> validator)
         {
-            var validationResult = await validator.ValidateAsync(jobOfferCreateRequest);
-
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.ToDictionary());
+            await validator.ValidateAndThrowAsync(jobOfferCreateRequest);
 
             JobOffer jobOffer = new()
             {
@@ -101,7 +114,28 @@ namespace JobChannel.API.Controllers
         public async Task<IActionResult> Delete(
             [FromRoute] int id)
         {
-            return (await _jobOfferService.Delete(id) != 0) ? NoContent() : NotFound();
+            return await _jobOfferService.Delete(id) != 0 ? NoContent() : NotFound();
+        }
+
+        [HttpPost("PoleEmploi")]
+        public async Task<IActionResult> InsertPoleEmploi(
+            [FromBody] GetPoleEmploiJobOffersRequest request,
+            [FromServices] IJobOfferPoleEmploiService jobOfferPoleEmploiService,
+            [FromServices] IValidator<GetPoleEmploiJobOffersRequest> validator
+            )
+        {
+            await validator.ValidateAndThrowAsync(request);
+
+            var jo = await jobOfferPoleEmploiService.GetJobOffers(new GetPoleEmploiJobOffersQuery((request.Start, request.End), request.CodeRome));
+
+            int i = 0;
+
+            foreach (JobOfferPoleEmploi jobOffer in jo)
+            {
+                i += (await jobOfferPoleEmploiService.InsertJobOfferPoleEmploi(jobOffer)) ? 1 : 0;
+            }
+
+            return Ok(i);
         }
     }
 }
