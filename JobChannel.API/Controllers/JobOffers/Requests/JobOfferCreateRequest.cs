@@ -1,11 +1,12 @@
 ﻿using System;
 using FluentValidation;
+using JobChannel.BLL.Extensions;
+using JobChannel.Domain.Contracts;
 
-namespace JobChannel.Domain.DTO
+namespace JobChannel.API.Controllers.JobOffers.Requests
 {
-    public record JobOfferUpdateRequest
+    public record JobOfferCreateRequest : IRequest
     {
-        public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime PublicationDate { get; set; }
@@ -18,8 +19,7 @@ namespace JobChannel.Domain.DTO
         public int ContractId { get; set; }
         public int CityId { get; set; }
 
-        public JobOfferUpdateRequest(
-            int id,
+        public JobOfferCreateRequest(
             string title,
             string description,
             DateTime publicationDate,
@@ -30,10 +30,8 @@ namespace JobChannel.Domain.DTO
             string company,
             int jobId,
             int contractId,
-            int cityId
-            )
+            int cityId)
         {
-            Id = id;
             Title = title;
             Description = description;
             PublicationDate = publicationDate;
@@ -41,23 +39,22 @@ namespace JobChannel.Domain.DTO
             Url = url;
             Salary = salary;
             Experience = experience;
+            Company = company;
             JobId = jobId;
             ContractId = contractId;
             CityId = cityId;
-            Company = company;
         }
     }
 
-    public class JobOfferUpdateRequestValidator : AbstractValidator<JobOfferUpdateRequest>
+    public class JobOfferCreateRequestValidator : AbstractValidator<JobOfferCreateRequest>
     {
-        public JobOfferUpdateRequestValidator()
+        public JobOfferCreateRequestValidator()
         {
-            RuleFor(j => j.Id).NotNull().NotEmpty().GreaterThan(-1).WithErrorCode("");
             RuleFor(j => j.Title).NotNull().NotEmpty().MaximumLength(200);
             RuleFor(j => j.Description).NotNull().NotEmpty().MaximumLength(8000);
-            RuleFor(j => j.PublicationDate).ExclusiveBetween(DateTime.Now.AddMonths(-6), DateTime.Now);
-            RuleFor(j => j.ModificationDate).GreaterThanOrEqualTo(j => j.PublicationDate);
-            RuleFor(j => j.Url).NotNull().NotEmpty().Matches("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)");
+            RuleFor(j => j.PublicationDate).Date().ExclusiveBetween(DateTime.Now.AddMonths(-6), DateTime.Now);
+            RuleFor(j => j.ModificationDate).Date().GreaterThanOrEqualTo(j => j.PublicationDate);
+            RuleFor(j => j.Url).NotNull().NotEmpty().Url();
             RuleFor(j => j.Salary).NotNull().NotEmpty().MaximumLength(200);
             RuleFor(j => j.Experience).NotNull().NotEmpty().MaximumLength(100);
             RuleFor(j => j.Company).NotNull().NotEmpty().MaximumLength(100);

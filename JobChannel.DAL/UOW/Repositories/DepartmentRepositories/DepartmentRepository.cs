@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using JobChannel.Domain.BO;
-using JobChannel.Domain.DTO;
 using JobChannel.Domain.Exceptions;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobChannel.DAL.UOW.Repositories.DepartmentRepositories
@@ -23,20 +23,25 @@ namespace JobChannel.DAL.UOW.Repositories.DepartmentRepositories
 
         public async Task<Department> GetById(int id)
         {
-            string query = @"SELECT d.Id, d.Name, d.Code
+            string query = @"SELECT d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
                             FROM JobChannel.Department d
+                            JOIN JobChannel.Region r ON d.Id_Region = r.Id
                             WHERE d.Id = @Id";
 
-            return (await _dbSession.Connection.QueryFirstOrDefaultAsync<Department>(query, new { id })) ?? throw new DepartmentNotFoundException();
+            return (await _dbSession.Connection.QueryAsync<Department, Region, Department>(query, (department, region) =>
+            {
+                department.Region = region;
+                return department;
+            }, param: new { id })).FirstOrDefault() ?? throw new DepartmentNotFoundException(id);
         }
 
-        public async Task<IEnumerable<DepartmentGetResponse>?> GetDepartmentsByRegionId(int regionId)
+        public async Task<IEnumerable<Department>> GetDepartmentsByRegionId(int regionId)
         {
             string query = @"SELECT d.Id, d.Name, d.Code
                             FROM JobChannel.Department d
                             WHERE d.Id_Region = @regionId";
 
-            return await _dbSession.Connection.QueryAsync<DepartmentGetResponse>(query, new { regionId });
+            return await _dbSession.Connection.QueryAsync<Department>(query, new { regionId });
         }
     }
 }

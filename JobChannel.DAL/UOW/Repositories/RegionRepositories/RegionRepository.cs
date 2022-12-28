@@ -26,7 +26,7 @@ namespace JobChannel.DAL.UOW.Repositories.RegionRepositories
                             FROM JobChannel.Region r
                             WHERE r.Id = @Id";
 
-            return (await _dbSession.Connection.QueryFirstOrDefaultAsync<Region>(query, new { id })) ?? throw new RegionNotFoundException();
+            return (await _dbSession.Connection.QueryFirstOrDefaultAsync<Region>(query, new { id })) ?? throw new RegionNotFoundException(id);
         }
     }
 }

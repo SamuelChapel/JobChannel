@@ -2,7 +2,7 @@
 using JobChannel.BLL.Services.RegionServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobChannel.API.Controllers
+namespace JobChannel.API.Controllers.Geographics.Regions
 {
     [Route("api/[controller]")]
     [ApiController]

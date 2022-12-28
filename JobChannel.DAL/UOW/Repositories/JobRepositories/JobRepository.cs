@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using JobChannel.Domain.BO;
 using JobChannel.Domain.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,7 +26,17 @@ namespace JobChannel.DAL.UOW.Repositories.JobRepositories
                             FROM JobChannel.Job j
                             WHERE Id = @id";
             var job = (await _dbSession.Connection.QueryFirstOrDefaultAsync<Job>(query, new { id })) ?? 
-                throw new JobNotFoundException();
+                throw new JobNotFoundException(id);
+
+            return job;
+        }
+
+        public async Task<Job> GetByRomeCode(string romeCode)
+        {
+            string query = @"SELECT j.Id, j.Name, j.CodeRome
+                            FROM JobChannel.Job j
+                            WHERE j.CodeRome = @romeCode";
+            var job = (await _dbSession.Connection.QueryFirstOrDefaultAsync<Job>(query, new { romeCode }));
 
             return job;
         }

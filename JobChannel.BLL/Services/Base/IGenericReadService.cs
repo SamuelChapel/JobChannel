@@ -4,7 +4,7 @@ using JobChannel.Domain.Base;
 
 namespace JobChannel.BLL.Services.Base
 {
-    public interface IGenericReadService<T, Tid> where T : BaseEntity<Tid>
+    public interface IGenericReadService<T, Tid> where T : BaseEntity<Tid> where Tid : struct
     {
         Task<T> GetById(Tid id);
 

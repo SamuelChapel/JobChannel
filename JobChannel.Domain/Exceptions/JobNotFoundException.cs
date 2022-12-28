@@ -1,9 +1,9 @@
-﻿using System;
+﻿using JobChannel.Domain.Exceptions.Base;
 
 namespace JobChannel.Domain.Exceptions
 {
-    public class JobNotFoundException : Exception
+    public class JobNotFoundException : NotFoundException
     {
-        public JobNotFoundException() : base ("Le job n'existe pas") { }
+        public JobNotFoundException(int id) : base ($"Le job avec l'id {id} n'existe pas") { }
     }
 }

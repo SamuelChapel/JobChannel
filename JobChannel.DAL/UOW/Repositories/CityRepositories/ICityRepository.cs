@@ -7,6 +7,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 {
     public interface ICityRepository : IGenericReadRepository<City, int>
     {
+        Task<City> GetByPostCode(string postCode);
         Task<IEnumerable<City>> GetCitiesByDepartmentId(int departmentId);
     }
 }
