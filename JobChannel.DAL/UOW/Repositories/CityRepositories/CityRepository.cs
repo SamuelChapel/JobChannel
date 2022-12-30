@@ -83,7 +83,5 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 
             return cities.First();
         }
-
-
     }
 }

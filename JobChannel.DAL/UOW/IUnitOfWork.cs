@@ -17,9 +17,24 @@ namespace JobChannel.DAL.UOW
         IRegionRepository RegionRepository { get; }
         IJobOfferRepository JobOfferRepository { get; }
 
+        /// <summary>
+        /// Start a Transaction
+        /// </summary>
         void BeginTransaction();
+
+        /// <summary>
+        /// Commit a transaction
+        /// </summary>
         void Commit();
+
+        /// <summary>
+        /// Dispose the 
+        /// </summary>
         void Dispose();
+
+        /// <summary>
+        /// Rollback the transaction
+        /// </summary>
         void Rollback();
     }
 }

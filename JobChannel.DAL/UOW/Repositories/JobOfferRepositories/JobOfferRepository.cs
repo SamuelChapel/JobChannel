@@ -144,11 +144,6 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             }).FirstOrDefault() ?? throw new JobOfferNotFoundException(id);
         }
 
-        /// <summary>
-        /// Insert a job offer in the database
-        /// </summary>
-        /// <param name="jobOffer">the job offer to insert</param>
-        /// <returns>the id of the job offer inserted in the database</returns>
         public async Task<int> Create(JobOffer jobOffer)
         {
             string query = @"INSERT INTO JobChannel.JobOffer (Title, Description, PublicationDate, ModificationDate, 
@@ -165,11 +160,6 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             return await _dbSession.Connection.ExecuteScalarAsync<int>(query, param, _dbSession.Transaction);
         }
 
-        /// <summary>
-        /// Update a job offer int the database
-        /// </summary>
-        /// <param name="jobOffer">the job offer who contains the data to update</param>
-        /// <returns>the number of updated row in the database</returns>
         public async Task<int> Update(JobOffer jobOffer)
         {
             string query = @"UPDATE JobChannel.JobOffer
@@ -186,11 +176,6 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             return await _dbSession.Connection.ExecuteAsync(query, param, _dbSession.Transaction);
         }
 
-        /// <summary>
-        /// Delete job offer in the database
-        /// </summary>
-        /// <param name="id"> the job offer id to delete</param>
-        /// <returns>the number of deleted row in the database</returns>
         public async Task<int> Delete(int id)
         {
             string query = @"DELETE FROM JobChannel.JobOffer
