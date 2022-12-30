@@ -7,7 +7,10 @@ namespace JobChannel.API.Controllers.JobOffers.Requests
     public record GetPoleEmploiJobOffersRequest(
         int Start,
         int End,
-        string CodeRome
+        string? CodeRome,
+        string? Commune,
+        int? PublieeDepuis,
+        bool? EntreprisesAdaptees
         );
 
     public class GetPoleEmploiJobOffersRequestValidator : AbstractValidator<GetPoleEmploiJobOffersRequest>

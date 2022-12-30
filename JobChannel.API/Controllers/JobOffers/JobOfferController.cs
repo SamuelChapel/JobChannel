@@ -11,10 +11,6 @@ using JobChannel.BLL.Services.JobOfferServices;
 using JobChannel.BLL.Services.JobServices;
 using JobChannel.BLL.Services.PoleEmploi.JobOffers;
 using JobChannel.DAL.ObjectExtensions;
-using JobChannel.DAL.UOW.Repositories.CityRepositories;
-using JobChannel.DAL.UOW.Repositories.ContractRepositories;
-using JobChannel.DAL.UOW.Repositories.JobOfferRepositories;
-using JobChannel.DAL.UOW.Repositories.JobRepositories;
 using JobChannel.Domain.BO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -126,16 +122,9 @@ namespace JobChannel.API.Controllers.JobOffers
         {
             await validator.ValidateAndThrowAsync(request);
 
-            var jo = await jobOfferPoleEmploiService.GetJobOffers(new GetPoleEmploiJobOffersQuery((request.Start, request.End), request.CodeRome));
+            var result = await jobOfferPoleEmploiService.GetAndInsertPoleEmploiJobOffers(new GetPoleEmploiJobOffersQuery((request.Start, request.End), request.CodeRome, request.Commune, request.PublieeDepuis, request.EntreprisesAdaptees));
 
-            int i = 0;
-
-            foreach (JobOfferPoleEmploi jobOffer in jo)
-            {
-                i += (await jobOfferPoleEmploiService.InsertJobOfferPoleEmploi(jobOffer)) ? 1 : 0;
-            }
-
-            return Ok(i);
+            return Ok(result);
         }
     }
 }

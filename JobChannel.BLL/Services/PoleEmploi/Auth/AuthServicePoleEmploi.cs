@@ -21,7 +21,6 @@ namespace JobChannel.BLL.Services.PoleEmploi.Auth
         public async Task<string?> GenerateAccessToken(HttpClient client)
         {
             AccessTokenResponse token;
-            var environmentVariable = new EnvironmentVariable();
 
             try
             {

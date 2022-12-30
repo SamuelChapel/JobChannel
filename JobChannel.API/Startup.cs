@@ -21,10 +21,13 @@ namespace JobChannel.API
         public void ConfigureServices(IServiceCollection services)
         {
             Configuration.GetConnectionString("OVH");
+
             services.AddControllers();
             services.AddApiServices();
             services.AddBLLServices();
             services.AddDALServices();
+
+            services.AddBackgroundServices();
 
             services.AddSwaggerGen(c =>
             {

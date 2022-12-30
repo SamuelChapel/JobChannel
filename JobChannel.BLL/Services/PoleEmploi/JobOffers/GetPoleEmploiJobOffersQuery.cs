@@ -1,7 +1,13 @@
-﻿namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
+﻿using System;
+using JobChannel.Domain.Contracts;
+
+namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
 {
     public record GetPoleEmploiJobOffersQuery(
-        (int start, int end) Range,
-        string CodeRome
-        );
+        ValueTuple<int, int>? Range,
+        string? CodeRome,
+        string? Commune,
+        int? PublieeDepuis,
+        bool? EntreprisesAdaptees
+        ) : IQuery;
 }
