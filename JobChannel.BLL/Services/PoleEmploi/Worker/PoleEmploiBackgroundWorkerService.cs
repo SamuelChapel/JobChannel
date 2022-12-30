@@ -10,17 +10,16 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
 {
     public class PoleEmploiBackgroundWorkerService : BackgroundService
     {
-        private CrontabSchedule _schedule;
+        private readonly CrontabSchedule _schedule;
         private DateTime _nextRun;
-        private const string Schedule = "02 11 * * *";
-        //private const int generalDelay = 60 * 1000; // 1 minute
+        private const string ScheduleExpression = "0 0 * * *";
 
         private readonly IServiceProvider _serviceProvider;
 
         public PoleEmploiBackgroundWorkerService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _schedule = CrontabSchedule.Parse(Schedule);
+            _schedule = CrontabSchedule.Parse(ScheduleExpression);
             _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
         }
 
@@ -34,18 +33,10 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
                     _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
                 }
 
-                Console.WriteLine(_nextRun.ToLongDateString());
-
-                //wait 10 secondes before each check
-                await Task.Delay(10000, stoppingToken);
+                TimeSpan waitTime = _nextRun - DateTime.Now;
+                await Task.Delay((int)waitTime.TotalMilliseconds, stoppingToken);
             }
             while (!stoppingToken.IsCancellationRequested);
-
-            //while (!stoppingToken.IsCancellationRequested)
-            //{
-            //    await Task.Delay(generalDelay, stoppingToken);
-            //    await LookForNewJobOffers("M1805");
-            //}
         }
 
         private async Task LookForNewJobOffers(string codeRome)
