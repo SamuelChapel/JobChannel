@@ -4,6 +4,7 @@ using JobChannel.BLL.Services.DepartmentServices;
 using JobChannel.BLL.Services.JobOfferServices;
 using JobChannel.BLL.Services.JobServices;
 using JobChannel.BLL.Services.PoleEmploi.JobOffers;
+using JobChannel.BLL.Services.PoleEmploi.Worker;
 using JobChannel.BLL.Services.RegionServices;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,6 +21,13 @@ namespace JobChannel.BLL.Extensions
             services.AddScoped<IContractService, ContractService>();
             services.AddScoped<IJobOfferService, JobOfferService>();
             services.AddScoped<IJobOfferPoleEmploiService, JobOfferPoleEmploiService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddBackgroundServices(this IServiceCollection services)
+        {
+            services.AddHostedService<PoleEmploiBackgroundWorkerService>();
 
             return services;
         }

@@ -8,7 +8,9 @@
 	<ItemGroup>
 	  <PackageReference Include="FluentValidation" Version="11.4.0" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.170.0" />
+	  <PackageReference Include="NCrontab.Scheduler.AspNetCore" Version="1.0.43" />
 	</ItemGroup>
 
 	<ItemGroup>
