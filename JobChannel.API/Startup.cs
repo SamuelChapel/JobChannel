@@ -1,7 +1,6 @@
 using JobChannel.API.Extensions;
 using JobChannel.BLL.Extensions;
 using JobChannel.DAL.Extensions;
-using JobChannel.Domain.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

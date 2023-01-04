@@ -6,7 +6,7 @@ using JobChannel.Domain.Exceptions;
 
 namespace JobChannel.DAL.UOW.Repositories.ContractRepositories
 {
-    public class ContractRepository : IContractRepository
+    internal class ContractRepository : IContractRepository
     {
         private readonly IDbSession _dbSession;
 

@@ -1,13 +1,11 @@
 ﻿using JobChannel.DAL.UOW;
-using JobChannel.DAL.UOW.Repositories.CityRepositories;
 using JobChannel.Domain.BO;
-using JobChannel.Domain.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace JobChannel.BLL.Services.CityServices
 {
-    public class CityService : ICityService
+    internal class CityService : ICityService
     {
         public readonly IUnitOfWork _dbContext;
 

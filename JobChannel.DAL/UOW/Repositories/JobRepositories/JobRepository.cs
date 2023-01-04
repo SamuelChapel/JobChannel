@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JobChannel.DAL.UOW.Repositories.JobRepositories
 {
-    public class JobRepository : IJobRepository
+    internal class JobRepository : IJobRepository
     {
         private readonly IDbSession _dbSession;
 

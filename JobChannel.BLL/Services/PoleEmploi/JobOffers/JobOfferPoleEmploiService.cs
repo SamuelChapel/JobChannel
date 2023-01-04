@@ -15,7 +15,7 @@ using Microsoft.TeamFoundation.Common;
 
 namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
 {
-    public class JobOfferPoleEmploiService : IJobOfferPoleEmploiService
+    internal class JobOfferPoleEmploiService : IJobOfferPoleEmploiService
     {
         private readonly AuthServicePoleEmploi authServicePole;
         private readonly HttpClient client;

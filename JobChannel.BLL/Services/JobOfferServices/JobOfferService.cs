@@ -9,7 +9,7 @@ using JobChannel.Domain.BO;
 
 namespace JobChannel.BLL.Services.JobOfferServices
 {
-    public class JobOfferService : IJobOfferService
+    internal class JobOfferService : IJobOfferService
     {
         public readonly IUnitOfWork _dbContext;
 
