@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JobChannel.BLL.Services.RegionServices
 {
-    public class RegionService : IRegionService
+    internal class RegionService : IRegionService
     {
         public readonly IUnitOfWork _dbContext;
 

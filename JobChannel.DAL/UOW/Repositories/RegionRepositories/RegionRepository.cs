@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JobChannel.DAL.UOW.Repositories.RegionRepositories
 {
-    public class RegionRepository : IRegionRepository
+    internal class RegionRepository : IRegionRepository
     {
         private readonly IDbSession _dbSession;
 

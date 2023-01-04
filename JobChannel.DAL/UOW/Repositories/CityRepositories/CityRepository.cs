@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 {
-    public class CityRepository : ICityRepository
+    internal class CityRepository : ICityRepository
     {
         private readonly IDbSession _dbSession;
 

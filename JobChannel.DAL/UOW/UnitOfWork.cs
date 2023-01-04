@@ -8,7 +8,7 @@ using JobChannel.DAL.UOW.Repositories.RegionRepositories;
 
 namespace JobChannel.DAL.UOW
 {
-    public class UnitOfWork : IDisposable, IUnitOfWork
+    internal class UnitOfWork : IDisposable, IUnitOfWork
     {
         public IJobRepository JobRepository { get => new JobRepository(DbSession); }
         public IContractRepository ContractRepository { get => new ContractRepository(DbSession); }

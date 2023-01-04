@@ -6,7 +6,7 @@ using JobChannel.Domain.Exceptions;
 
 namespace JobChannel.BLL.Services.ContractServices
 {
-    public class ContractService : IContractService
+    internal class ContractService : IContractService
     {
         public readonly IUnitOfWork _dbContext;
 

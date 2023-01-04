@@ -8,18 +8,12 @@ using JobChannel.Domain.Exceptions;
 
 namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 {
-    public class JobOfferRepository : IJobOfferRepository
+    internal class JobOfferRepository : IJobOfferRepository
     {
         private readonly IDbSession _dbSession;
 
         public JobOfferRepository(IDbSession dbSession) => _dbSession = dbSession;
 
-        /// <summary>
-        /// Find all job offers 
-        /// </summary>
-        /// <param name="searchFields">Dictionary of search criteria</param>
-        /// <returns>All the job offer's matching the criteria</returns>
-        /// <exception cref="Exception"></exception>
         public async Task<IEnumerable<JobOffer>> GetAll(IReadOnlyDictionary<string, dynamic>? searchFields)
         {
             string query = @"SELECT jo.Id, jo.Title, jo.Description, jo.PublicationDate, jo.ModificationDate,
@@ -104,12 +98,6 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             });
         }
 
-        /// <summary>
-        /// Get a job offer by his id 
-        /// </summary>
-        /// <param name="id">job offer id to find</param>
-        /// <returns>the job offer matching the id</returns>
-        /// <exception cref="JobOfferNotFoundException"></exception>
         public async Task<JobOffer> GetById(int id)
         {
             string query = @"SELECT jo.Id, jo.Title, jo.Description, jo.PublicationDate, jo.ModificationDate,
@@ -173,7 +161,9 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             param.Add("Id_City", jobOffer.City.Id);
             param.Add("Id_Job", jobOffer.Job.Id);
 
-            return await _dbSession.Connection.ExecuteAsync(query, param, _dbSession.Transaction);
+            int result = await _dbSession.Connection.ExecuteAsync(query, param, _dbSession.Transaction);
+
+            return result == 0 ? throw new BadRequestException("Update non effectué") : result;
         }
 
         public async Task<int> Delete(int id)

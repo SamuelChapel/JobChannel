@@ -5,46 +5,19 @@ using JobChannel.Domain.Contracts;
 
 namespace JobChannel.API.Controllers.JobOffers.Requests
 {
-    public record JobOfferCreateRequest : IRequest
-    {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public DateTime PublicationDate { get; set; }
-        public DateTime ModificationDate { get; set; }
-        public string Url { get; set; }
-        public string Salary { get; set; }
-        public string Experience { get; set; }
-        public string Company { get; set; }
-        public int JobId { get; set; }
-        public int ContractId { get; set; }
-        public int CityId { get; set; }
-
-        public JobOfferCreateRequest(
-            string title,
-            string description,
-            DateTime publicationDate,
-            DateTime modificationDate,
-            string url,
-            string salary,
-            string experience,
-            string company,
-            int jobId,
-            int contractId,
-            int cityId)
-        {
-            Title = title;
-            Description = description;
-            PublicationDate = publicationDate;
-            ModificationDate = modificationDate;
-            Url = url;
-            Salary = salary;
-            Experience = experience;
-            Company = company;
-            JobId = jobId;
-            ContractId = contractId;
-            CityId = cityId;
-        }
-    }
+    public record JobOfferCreateRequest(
+        string Title,
+        string Description,
+        DateTime PublicationDate,
+        DateTime ModificationDate,
+        string Url,
+        string Salary,
+        string Experience,
+        string Company,
+        int JobId,
+        int ContractId,
+        int CityId
+    ) : IRequest;
 
     public class JobOfferCreateRequestValidator : AbstractValidator<JobOfferCreateRequest>
     {

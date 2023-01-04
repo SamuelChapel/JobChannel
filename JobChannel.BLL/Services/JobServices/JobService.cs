@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace JobChannel.BLL.Services.JobServices
 {
-    public class JobService : IJobService
+    internal class JobService : IJobService
     {
         public readonly IUnitOfWork _dbContext;
 

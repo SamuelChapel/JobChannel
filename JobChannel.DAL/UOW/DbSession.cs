@@ -5,7 +5,7 @@ using System.Data;
 
 namespace JobChannel.DAL.UOW
 {
-    public class DbSession : IDbSession
+    internal class DbSession : IDbSession
     {
         public IDbConnection Connection { get; private set; }
 

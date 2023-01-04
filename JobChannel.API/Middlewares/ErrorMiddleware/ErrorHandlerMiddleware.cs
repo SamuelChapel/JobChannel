@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using JobChannel.API.Middlewares.ErrorMiddleware.Responses;
 using JobChannel.BLL.Exceptions;
+using JobChannel.Domain.Exceptions;
 using JobChannel.Domain.Exceptions.Base;
 using Microsoft.AspNetCore.Http;
 
