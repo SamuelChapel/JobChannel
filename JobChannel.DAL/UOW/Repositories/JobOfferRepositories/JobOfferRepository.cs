@@ -12,7 +12,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
     {
         private readonly IDbSession _dbSession;
 
-        public JobOfferRepository(IDbSession dbSession) => _dbSession = dbSession;
+        internal JobOfferRepository(IDbSession dbSession) => _dbSession = dbSession;
 
         public async Task<IEnumerable<JobOffer>> GetAll(IReadOnlyDictionary<string, dynamic>? searchFields)
         {
@@ -35,12 +35,15 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                 bool first = true;
                 foreach (var field in searchFields)
                 {
-                    query += first ? " WHERE " : " AND ";
-                    first = false;
+                    if (field.Value is not int && field.Key != "Order")
+                    {
+                        query += first ? " WHERE " : " AND ";
+                        first = false;
+                    }
 
                     query += field.Value switch
                     {
-                        IEnumerable<int> list => field.Key switch
+                        IEnumerable<int> => field.Key switch
                         {
                             "Id_Region" => $"r.Id",
                             "Id_Department" => $"d.Id",
@@ -49,9 +52,10 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 
                         ValueTuple<DateTime, DateTime> d => $"jo.{field.Key} BETWEEN @{d.Item1.Ticks} AND @{d.Item2.Ticks}",
 
-                        string s => field.Key switch
+                        string => field.Key switch
                         {
                             "Url" => $"jo.Url COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key}",
+                            "Order" => $" ORDER BY jo.{field.Value}",
                             _ => $"(jo.Title COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
                                  $"jo.Company COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
                                  $"c.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
@@ -61,8 +65,13 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                                  $"ct.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
                                  $"jo.Url COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key})"
                         },
-
-                        _ => throw new Exception("Valeur non prévue")
+                        int => field.Key switch
+                        {
+                            "Page" => $" OFFSET {(field.Value - 1) * searchFields["Count"]} ROWS",
+                            "Count" => $" FETCH NEXT {field.Value} ROWS ONLY",
+                            _ => throw new Exception("Int non prévue")
+                        },
+                        _ => throw new Exception("String non prévue")
                     };
 
                     if (field.Value is ValueTuple<DateTime, DateTime> date)
@@ -70,7 +79,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                         parameters.Add(date.Item1.Ticks.ToString(), date.Item1.Date);
                         parameters.Add(date.Item2.Ticks.ToString(), date.Item2.Date);
                     }
-                    else if (field.Value is string s)
+                    else if (field.Value is string s && field.Key != "Order")
                     {
                         parameters.Add(field.Key, "%" + s + "%");
                     }
