@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using JobChannel.BLL.Services.CityServices;
 using JobChannel.BLL.Services.ContractServices;

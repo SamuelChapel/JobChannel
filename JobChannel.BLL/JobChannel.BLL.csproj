@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
@@ -11,6 +11,12 @@
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.170.0" />
 	  <PackageReference Include="NCrontab.Scheduler.AspNetCore" Version="1.0.43" />
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>JobChannel.Tests.Units</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>JobChannel.Tests.Integrations</_Parameter1>
+		</AssemblyAttribute>
 	</ItemGroup>
 
 	<ItemGroup>

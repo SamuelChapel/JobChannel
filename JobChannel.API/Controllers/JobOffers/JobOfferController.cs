@@ -39,7 +39,6 @@ namespace JobChannel.API.Controllers.JobOffers
             await validator.ValidateAndThrowAsync(jobOfferFindRequest);
 
             var filters = new Dictionary<string, dynamic>();
-
             if (jobOfferFindRequest.Id_City?.Count() > 0) filters.Add("Id_City", jobOfferFindRequest.Id_City);
             if (jobOfferFindRequest.Id_Department?.Count() > 0) filters.Add("Id_Department", jobOfferFindRequest.Id_Department);
             if (jobOfferFindRequest.Id_Region?.Count() > 0) filters.Add("Id_Region", jobOfferFindRequest.Id_Region);
@@ -47,6 +46,9 @@ namespace JobChannel.API.Controllers.JobOffers
             if (jobOfferFindRequest.Id_Job?.Count() > 0) filters.Add("Id_Job", jobOfferFindRequest.Id_Job);
             if (jobOfferFindRequest.Id_Contract?.Count() > 0) filters.Add("Id_Contract", jobOfferFindRequest.Id_Contract);
             if (jobOfferFindRequest.SearchString?.Length > 0) filters.Add("SearchString", jobOfferFindRequest.SearchString.NormalizeAndRemoveDiacriticsAndToLower());
+            filters.Add("Order", jobOfferFindRequest.OrderBy);
+            filters.Add("Page", jobOfferFindRequest.Page);
+            filters.Add("Count", jobOfferFindRequest.Count);
 
             return await _jobOfferService.GetAll(filters);
         }

@@ -1,6 +1,4 @@
 ﻿using JobChannel.DAL.UOW;
-using JobChannel.DAL.UOW.Repositories.JobRepositories;
-using JobChannel.DAL.UOW.Repositories.RegionRepositories;
 using JobChannel.Domain.BO;
 using System.Collections.Generic;
 using System.Threading.Tasks;

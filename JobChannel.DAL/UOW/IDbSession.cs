@@ -5,7 +5,7 @@ namespace JobChannel.DAL.UOW
 {
     public interface IDbSession : IDisposable
     {
-        public IDbConnection Connection { get; }
+        public IDbConnection Connection { get; set; }
 
         public IDbTransaction? Transaction { get; set; }
     }

@@ -7,7 +7,7 @@ namespace JobChannel.DAL.UOW
 {
     internal class DbSession : IDbSession
     {
-        public IDbConnection Connection { get; private set; }
+        public IDbConnection Connection { get; set; }
 
         public IDbTransaction? Transaction { get; set; }
 

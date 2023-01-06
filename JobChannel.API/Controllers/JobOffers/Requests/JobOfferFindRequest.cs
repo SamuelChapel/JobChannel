@@ -7,6 +7,9 @@ using JobChannel.Domain.Contracts;
 namespace JobChannel.API.Controllers.JobOffers.Requests
 {
     public record JobOfferFindRequest(
+        string OrderBy,
+        int Count,
+        int Page,
         IEnumerable<int>? Id_Region,
         IEnumerable<int>? Id_Department,
         IEnumerable<int>? Id_City,
@@ -21,6 +24,8 @@ namespace JobChannel.API.Controllers.JobOffers.Requests
     {
         public JobOfferFindRequestValidator()
         {
+            RuleFor( x => x.Count).NotNull();
+            RuleFor( x => x.Page).NotNull();
             RuleFor(x => x.StartDate).Must((a, b) => b is null && a.EndDate is null || b is not null && a.EndDate is not null && b < a.EndDate)
                                      .WithErrorCode("DateIntervalInvalid");
 
