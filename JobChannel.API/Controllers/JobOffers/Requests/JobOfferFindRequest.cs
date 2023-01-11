@@ -7,9 +7,6 @@ using JobChannel.Domain.Contracts;
 namespace JobChannel.API.Controllers.JobOffers.Requests
 {
     public record JobOfferFindRequest(
-        string OrderBy,
-        int Count,
-        int Page,
         IEnumerable<int>? Id_Region,
         IEnumerable<int>? Id_Department,
         IEnumerable<int>? Id_City,
@@ -17,7 +14,9 @@ namespace JobChannel.API.Controllers.JobOffers.Requests
         IEnumerable<int>? Id_Contract,
         DateTime? StartDate,
         DateTime? EndDate,
-        string? SearchString
+        string? SearchString,
+        int? Page,
+        int? Count
     ) : IRequest;
 
     public class JobOfferFindRequestValidator : AbstractValidator<JobOfferFindRequest>

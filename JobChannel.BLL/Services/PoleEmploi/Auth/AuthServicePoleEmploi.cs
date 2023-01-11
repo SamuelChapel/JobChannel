@@ -12,10 +12,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.Auth
         private DateTime ExpirationDate;
         public bool IsExpired => DateTime.Now > ExpirationDate;
 
-        public AuthServicePoleEmploi()
-        {
-            ExpirationDate = DateTime.Now;
-        }
+        public AuthServicePoleEmploi() => ExpirationDate = DateTime.Now;
 
         public async Task<string?> GenerateAccessToken(HttpClient client)
         {

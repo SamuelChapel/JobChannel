@@ -16,7 +16,7 @@ namespace JobChannel.BLL.Services.JobOfferServices
             IJobService jobService,
             ICityService cityService,
             IContractService contractService);
-        public Task<int> Update(JobOffer request);
-        public Task<int> Delete(int id);
+        public Task<int> Update(JobOffer jobOffer);
+        public Task<int> Delete(JobOffer jobOffer);
     }
 }
