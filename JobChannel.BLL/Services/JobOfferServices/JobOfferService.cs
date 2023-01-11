@@ -36,7 +36,7 @@ namespace JobChannel.BLL.Services.JobOfferServices
         public Task<int> Update(JobOffer jobOffer) 
             => _dbContext.JobOfferRepository.Update(jobOffer);
 
-        public Task<int> Delete(int id) 
-            => _dbContext.JobOfferRepository.Delete(id);
+        public Task<int> Delete(JobOffer jobOffer) 
+            => _dbContext.JobOfferRepository.Delete(jobOffer);
     }
 }

@@ -1,11 +1,14 @@
+using JobChannel.API.Configuration;
 using JobChannel.API.Extensions;
 using JobChannel.BLL.Extensions;
 using JobChannel.DAL.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace JobChannel.API
@@ -21,12 +24,22 @@ namespace JobChannel.API
         {
             Configuration.GetConnectionString("OVH");
 
+            services.AddCors(options => options.AddPolicy("default", policy =>
+            {
+                policy.AllowAnyOrigin();
+                policy.AllowAnyMethod();
+                policy.AllowAnyHeader();
+            }));
+
             services.AddControllers();
             services.AddApiServices();
             services.AddBLLServices();
             services.AddDALServices();
 
             services.AddBackgroundServices();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearerConfiguration(Configuration);
 
             services.AddSwaggerGen(c =>
             {
@@ -50,6 +63,9 @@ namespace JobChannel.API
 
             app.UseRouting();
 
+            app.UseCors("default");
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

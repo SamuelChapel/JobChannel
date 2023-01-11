@@ -12,7 +12,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
     {
         private readonly IDbSession _dbSession;
 
-        internal JobOfferRepository(IDbSession dbSession) => _dbSession = dbSession;
+        public JobOfferRepository(IDbSession dbSession) => _dbSession = dbSession;
 
         public async Task<IEnumerable<JobOffer>> GetAll(IReadOnlyDictionary<string, dynamic>? searchFields)
         {
@@ -33,9 +33,11 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             if (searchFields != null)
             {
                 bool first = true;
+                bool orderBy = false;
+
                 foreach (var field in searchFields)
                 {
-                    if (field.Value is not int && field.Key != "Order")
+                    if (field.Value is not int)
                     {
                         query += first ? " WHERE " : " AND ";
                         first = false;
@@ -50,12 +52,11 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                             _ => $"jo.{field.Key}"
                         } + $" IN @{field.Key}",
 
-                        ValueTuple<DateTime, DateTime> d => $"jo.{field.Key} BETWEEN @{d.Item1.Ticks} AND @{d.Item2.Ticks}",
+                        DateTime d => $"{(field.Key == "StartDate" ? $"jo.ModificationDate BETWEEN @{d.Ticks}" : $" @{d.Ticks}")}",
 
                         string => field.Key switch
                         {
                             "Url" => $"jo.Url COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key}",
-                            "Order" => $" ORDER BY jo.{field.Value}",
                             _ => $"(jo.Title COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
                                  $"jo.Company COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
                                  $"c.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
@@ -67,21 +68,25 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
                         },
                         int => field.Key switch
                         {
-                            "Page" => $" OFFSET {(field.Value - 1) * searchFields["Count"]} ROWS",
-                            "Count" => $" FETCH NEXT {field.Value} ROWS ONLY",
+                            "Page" => $"{(orderBy ? "" : " ORDER BY jo.PublicationDate")} OFFSET {(field.Value - 1) * searchFields["Count"]} ROWS",
+                            "Count" => $"{(orderBy ? "" : " ORDER BY jo.PublicationDate")} FETCH NEXT {field.Value} ROWS ONLY",
                             _ => throw new Exception("Int non prévue")
                         },
-                        _ => throw new Exception("String non prévue")
+                        _ => throw new Exception("Value non prévue")
                     };
 
-                    if (field.Value is ValueTuple<DateTime, DateTime> date)
+                    if (field.Value is DateTime date)
                     {
-                        parameters.Add(date.Item1.Ticks.ToString(), date.Item1.Date);
-                        parameters.Add(date.Item2.Ticks.ToString(), date.Item2.Date);
+                        parameters.Add(date.Ticks.ToString(), date);
                     }
-                    else if (field.Value is string s && field.Key != "Order")
+                    else if (field.Value is string s)
                     {
                         parameters.Add(field.Key, "%" + s + "%");
+                    }
+                    else if (field.Value is int)
+                    {
+                        orderBy = true;
+                        parameters.Add(field.Key, field.Value);
                     }
                     else
                         parameters.Add(field.Key, field.Value);
@@ -175,12 +180,12 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             return result == 0 ? throw new BadRequestException("Update non effectué") : result;
         }
 
-        public async Task<int> Delete(int id)
+        public async Task<int> Delete(JobOffer jobOffer)
         {
             string query = @"DELETE FROM JobChannel.JobOffer
                              WHERE Id = @id";
 
-            return await _dbSession.Connection.ExecuteAsync(query, new { id }, _dbSession.Transaction);
+            return await _dbSession.Connection.ExecuteAsync(query, new { jobOffer.Id }, _dbSession.Transaction);
         }
     }
 }

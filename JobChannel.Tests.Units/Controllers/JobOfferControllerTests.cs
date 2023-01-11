@@ -71,11 +71,12 @@ namespace JobChannel.Tests.Units.Controllers
         {
             // Arrange
             var mockJobOfferService = new Mock<IJobOfferService>();
-            mockJobOfferService.Setup(service => service.Delete(1)).ReturnsAsync(1);
+            var jobOffer = new JobOffer() { Id = 1 };
+            mockJobOfferService.Setup(service => service.Delete(It.IsAny<JobOffer>())).ReturnsAsync(1);
             var jobOfferController = new JobOfferController(mockJobOfferService.Object);
 
             // Act
-            var result = await jobOfferController.Delete(1);
+            var result = await jobOfferController.Delete(jobOffer.Id);
 
             // Assert
             Assert.IsType<NoContentResult>(result);
@@ -86,7 +87,8 @@ namespace JobChannel.Tests.Units.Controllers
         {
             // Arrange
             var mockJobOfferService = new Mock<IJobOfferService>();
-            mockJobOfferService.Setup(service => service.Delete(1)).ReturnsAsync(0);
+            var jobOffer = new JobOffer() { Id = 1 };
+            mockJobOfferService.Setup(service => service.Delete(It.IsAny<JobOffer>())).ReturnsAsync(0);
             var jobOfferController = new JobOfferController(mockJobOfferService.Object);
 
             // Act

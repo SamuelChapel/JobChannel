@@ -22,8 +22,8 @@ namespace JobChannel.DAL.UOW.Repositories.Base
         /// <summary>
         /// Delete a <typeparamref name="T"/>
         /// </summary>
-        /// <param name="t">The <typeparamref name="Tid"/> who correspond to the <typeparamref name="T"/></param>
-        /// <returns>The number of <typeparamref name="T"/> modified</returns>
-        Task<int> Delete(Tid id);
+        /// <param name="t">The <typeparamref name="T"/> to delete</param>
+        /// <returns>The number of <typeparamref name="T"/> deleted</returns>
+        Task<int> Delete(T jobOffer);
     }
 }

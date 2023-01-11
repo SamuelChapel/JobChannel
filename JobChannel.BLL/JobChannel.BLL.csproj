@@ -6,11 +6,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 	  <PackageReference Include="FluentValidation" Version="11.4.0" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+	  <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.7.1" />
 	  <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.170.0" />
 	  <PackageReference Include="NCrontab.Scheduler.AspNetCore" Version="1.0.43" />
+	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
 			<_Parameter1>JobChannel.Tests.Units</_Parameter1>
 		</AssemblyAttribute>
