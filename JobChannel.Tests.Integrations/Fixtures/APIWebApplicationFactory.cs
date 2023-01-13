@@ -30,7 +30,7 @@ namespace JobChannel.Tests.Integrations.Fixtures
                         .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestSchemeAdmin", options => { });
             });
 
-            TestData.Initialize(Configuration);
+            //TestData.Initialize(Configuration);
         }
 
     }
