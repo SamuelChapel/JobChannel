@@ -14,12 +14,8 @@
 	  <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.170.0" />
 	  <PackageReference Include="NCrontab.Scheduler.AspNetCore" Version="1.0.43" />
 	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>JobChannel.Tests.Units</_Parameter1>
-		</AssemblyAttribute>
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>JobChannel.Tests.Integrations</_Parameter1>
-		</AssemblyAttribute>
+		<InternalsVisibleTo Include="JobChannel.Tests.Units"/>
+		<InternalsVisibleTo Include="JobChannel.Tests.Integrations"/>
 	</ItemGroup>
 
 	<ItemGroup>

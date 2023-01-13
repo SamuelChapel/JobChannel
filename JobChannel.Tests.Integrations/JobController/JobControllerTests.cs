@@ -1,7 +1,6 @@
 ﻿using JobChannel.Tests.Integrations.Fixtures;
 using Xunit;
 using JobChannel.Domain.BO;
-using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Json;
 
