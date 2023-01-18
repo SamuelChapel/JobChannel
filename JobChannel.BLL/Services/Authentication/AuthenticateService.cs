@@ -46,5 +46,9 @@ namespace JobChannel.BLL.Services.Authentication
             return role ?? throw new UnauthorizedException("Utilisateur non valide");
         }
 
+        public bool ValidateAuthenticationToken(string token)
+        {
+            return _jwtTokenService.IsTokenValid(token);
+        }
     }
 }
