@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -15,13 +16,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JobChannel.API.Controllers.JobOffers
 {
+    /// <summary>
+    /// Controller for JobOffers
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class JobOfferController : ControllerBase, IGenericReadController<JobOffer, int, JobOfferFindRequest>
+    public class JobOfferController : ControllerBase, IGenericReadController<JobOffer, int, JobOfferFindRequest, JobOfferFindResponse>
     {
         private readonly IJobOfferService _jobOfferService;
 
+        /// <summary>
+        /// Constructor for the JobOfferController
+        /// </summary>
+        /// <param name="jobOfferService"></param>
         public JobOfferController(IJobOfferService jobOfferService) => _jobOfferService = jobOfferService;
 
         [HttpGet("{id}")]
@@ -31,7 +38,7 @@ namespace JobChannel.API.Controllers.JobOffers
             => await _jobOfferService.GetById(id);
 
         [HttpPost("search")]
-        public async Task<IEnumerable<JobOffer>> Find(
+        public async Task<IEnumerable<JobOfferFindResponse>> Find(
             [FromBody] JobOfferFindRequest jobOfferFindRequest,
             [FromServices] IValidator<JobOfferFindRequest> validator
             )
@@ -50,10 +57,33 @@ namespace JobChannel.API.Controllers.JobOffers
                 }
             }
 
-            return await _jobOfferService.GetAll(filters);
+            var jobOffers = await _jobOfferService.GetAll(filters);
+
+            var jobOffersResponses = jobOffers.Select(jo => new JobOfferFindResponse(
+                jo.Id,
+                jo.Title,
+                jo.PublicationDate,
+                jo.Url,
+                jo.Salary,
+                jo.Experience,
+                jo.Company,
+                jo.Job.Id,
+                jo.Job.Name,
+                jo.Contract.Id,
+                jo.Contract.Name,
+                jo.City.Id,
+                jo.City.Name,
+                jo.City.Department.Id,
+                jo.City.Department.Name,
+                jo.City.Department.Region.Id,
+                jo.City.Department.Region.Name
+                ));
+
+            return jobOffersResponses;
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(
             JobOfferCreateRequest jobOfferCreateRequest,
             [FromServices] IJobService jobService,
@@ -82,6 +112,7 @@ namespace JobChannel.API.Controllers.JobOffers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Update(
             [FromRoute] int id,
             [FromBody] JobOfferUpdateRequest jobOfferUpdateRequest,
@@ -109,6 +140,7 @@ namespace JobChannel.API.Controllers.JobOffers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(
             [FromRoute] int id)
         {
@@ -121,6 +153,7 @@ namespace JobChannel.API.Controllers.JobOffers
         }
 
         [HttpPost("PoleEmploi")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> InsertPoleEmploi(
             [FromBody] GetPoleEmploiJobOffersRequest request,
             [FromServices] IJobOfferPoleEmploiService jobOfferPoleEmploiService,

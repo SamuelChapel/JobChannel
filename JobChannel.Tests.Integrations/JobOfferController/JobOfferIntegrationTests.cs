@@ -15,7 +15,7 @@ namespace JobChannel.Tests.Integrations.JobOfferController
         }
 
         [Theory]
-        [InlineData(21)]
+        [InlineData(2)]
         public async void GetJobOfferByIdShouldReturnOk(int id)
         {
             // Arrange
@@ -40,12 +40,12 @@ namespace JobChannel.Tests.Integrations.JobOfferController
                 {
                     Name = "Études et développement informatique",
                     CodeRome = "M1805",
-                    Id = 71
+                    Id = 1
                 },
                 Company = "CREATIVE INGENIERIE",
                 City = new City()
                 {
-                    Id = 16355,
+                    Id = 102,
                     Name = "Saint-Herblain",
                     Code = "44162",
                     Population = 47415,
@@ -57,7 +57,7 @@ namespace JobChannel.Tests.Integrations.JobOfferController
                     {
                         Code = "44",
                         Name = "Loire-Atlantique",
-                        Id = 591,
+                        Id = 12,
                         Region = new Region()
                         {
                             Id = 52,
@@ -75,12 +75,11 @@ namespace JobChannel.Tests.Integrations.JobOfferController
             Assert.True(response.IsSuccessStatusCode);
 
             var actualJobOffer = await response.Content.ReadFromJsonAsync<JobOffer>();
-            //Assert.Equal(expectedJoOffer, actualJobOffer);
+            Assert.Equal(expectedJoOffer, actualJobOffer);
         }
 
         [Theory]
         [InlineData(1)]
-        [InlineData(2)]
         public async void GetJobOfferByIdShouldReturnNotFound(int id)
         {
             // Arrange
