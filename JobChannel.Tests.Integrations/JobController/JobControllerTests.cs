@@ -13,7 +13,7 @@ namespace JobChannel.Tests.Integrations.JobController
         }
 
         [Theory]
-        [InlineData(71)]
+        [InlineData(1)]
         public async void GetJobByIdShouldReturnOk(int id)
         {
             // Arrange

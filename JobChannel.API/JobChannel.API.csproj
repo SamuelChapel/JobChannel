@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -21,6 +22,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\JobChannel.BLL\JobChannel.BLL.csproj" />
 	  <ProjectReference Include="..\JobChannel.DAL\JobChannel.DAL.csproj" />
+	  <ProjectReference Include="..\JobChannel.Doc\JobChannel.DocFx.csproj" />
 	</ItemGroup>
 
 </Project>

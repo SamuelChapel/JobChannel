@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
@@ -25,10 +24,7 @@ namespace JobChannel.BLL.Services.Authentication.Token
             };
 
             //Add Roles
-            roles.ToList().ForEach(role =>
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            });
+            Array.ForEach(roles, role => claims.Add(new Claim(ClaimTypes.Role, role)));
 
             //Signin Key
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key")));
@@ -50,8 +46,13 @@ namespace JobChannel.BLL.Services.Authentication.Token
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public bool IsTokenValid(string key, string issuer, string token)
+        public bool IsTokenValid(string token)
         {
+            var key = _configuration.GetValue<string>("Jwt:Key");
+
+            var tokenDeserialize = JwtPayload.Deserialize(token);
+            var issuer = tokenDeserialize.Iss;
+
             var mySecret = Encoding.UTF8.GetBytes(key);
             var mySecurityKey = new SymmetricSecurityKey(mySecret);
             var tokenHandler = new JwtSecurityTokenHandler();

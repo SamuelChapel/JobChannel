@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,8 +15,8 @@
 	  <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.170.0" />
 	  <PackageReference Include="NCrontab.Scheduler.AspNetCore" Version="1.0.43" />
 	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
-		<InternalsVisibleTo Include="JobChannel.Tests.Units"/>
-		<InternalsVisibleTo Include="JobChannel.Tests.Integrations"/>
+		<InternalsVisibleTo Include="JobChannel.Tests.Units" />
+		<InternalsVisibleTo Include="JobChannel.Tests.Integrations" />
 	</ItemGroup>
 
 	<ItemGroup>

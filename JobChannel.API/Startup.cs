@@ -2,13 +2,13 @@ using JobChannel.API.Configuration;
 using JobChannel.API.Extensions;
 using JobChannel.BLL.Extensions;
 using JobChannel.DAL.Extensions;
+using JobChannel.Doc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace JobChannel.API
@@ -23,13 +23,6 @@ namespace JobChannel.API
         public void ConfigureServices(IServiceCollection services)
         {
             Configuration.GetConnectionString("OVH");
-
-            services.AddCors(options => options.AddPolicy("default", policy =>
-            {
-                policy.AllowAnyOrigin();
-                policy.AllowAnyMethod();
-                policy.AllowAnyHeader();
-            }));
 
             services.AddControllers();
             services.AddApiServices();
@@ -59,18 +52,18 @@ namespace JobChannel.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "JobChannel.API v1"));
             }
 
+            app.UseDocFxUI(settings => settings.Path = "/doc");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseCors("default");
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers().RequireAuthorization();
             });
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using BCrypt.Net;
 
 namespace JobChannel.BLL.Services.Authentication.Encryption
 {

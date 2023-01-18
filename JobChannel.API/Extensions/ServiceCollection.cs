@@ -13,8 +13,8 @@ namespace JobChannel.API.Extensions
             ValidatorOptions.Global.LanguageManager = new FrenchLanguageManager();
 
             services.AddScoped<IValidator<JobOfferUpdateRequest>, JobOfferUpdateRequestValidator>();
-            services.AddScoped< IValidator < JobOfferCreateRequest >, JobOfferCreateRequestValidator>();
-            services.AddScoped< IValidator < JobOfferFindRequest >, JobOfferFindRequestValidator>();
+            services.AddScoped<IValidator<JobOfferCreateRequest>, JobOfferCreateRequestValidator>();
+            services.AddScoped<IValidator<JobOfferFindRequest>, JobOfferFindRequestValidator>();
             services.AddScoped<IValidator<GetPoleEmploiJobOffersRequest>, GetPoleEmploiJobOffersRequestValidator>();
             services.AddScoped<IValidator<AuthenticateRequest>, AuthenticateRequestValidator>();
 
