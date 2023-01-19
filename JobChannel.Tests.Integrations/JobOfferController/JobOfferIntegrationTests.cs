@@ -89,7 +89,7 @@ namespace JobChannel.Tests.Integrations.JobOfferController
             var response = await _client.GetAsync(uri);
 
             // Assert
-            Assert.True(response.StatusCode is HttpStatusCode.NotFound);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }
 }
