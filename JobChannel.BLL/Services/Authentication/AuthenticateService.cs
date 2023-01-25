@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
-using JobChannel.BLL.Exceptions;
+﻿using JobChannel.BLL.Exceptions;
 using JobChannel.BLL.Services.Authentication.Encryption;
 using JobChannel.BLL.Services.Authentication.Token;
 using Microsoft.Extensions.Configuration;
