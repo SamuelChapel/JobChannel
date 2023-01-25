@@ -84,7 +84,7 @@ namespace JobChannel.API.Controllers.JobOffers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create(
+        public async Task<int> Create(
             JobOfferCreateRequest jobOfferCreateRequest,
             [FromServices] IJobService jobService,
             [FromServices] ICityService cityService,
@@ -108,7 +108,7 @@ namespace JobChannel.API.Controllers.JobOffers
                 Contract = new() { Id = jobOfferCreateRequest.ContractId }
             };
 
-            return Ok(await _jobOfferService.Create(jobOffer, jobService, cityService, contractService));
+            return await _jobOfferService.Create(jobOffer, jobService, cityService, contractService);
         }
 
         [HttpPut("{id}")]
@@ -136,7 +136,7 @@ namespace JobChannel.API.Controllers.JobOffers
                 Contract = new() { Id = jobOfferUpdateRequest.ContractId }
             };
 
-            return Ok(await _jobOfferService.Update(jobOffer));
+            return await _jobOfferService.Update(jobOffer) != 0 ? NoContent() : NotFound();
         }
 
         [HttpDelete("{id}")]
@@ -154,7 +154,7 @@ namespace JobChannel.API.Controllers.JobOffers
 
         [HttpPost("PoleEmploi")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> InsertPoleEmploi(
+        public async Task<int> InsertPoleEmploi(
             [FromBody] GetPoleEmploiJobOffersRequest request,
             [FromServices] IJobOfferPoleEmploiService jobOfferPoleEmploiService,
             [FromServices] IValidator<GetPoleEmploiJobOffersRequest> validator
@@ -164,7 +164,7 @@ namespace JobChannel.API.Controllers.JobOffers
 
             var result = await jobOfferPoleEmploiService.GetAndInsertPoleEmploiJobOffers(new GetPoleEmploiJobOffersQuery((request.Start, request.End), request.CodeRome, request.Commune, request.PublieeDepuis, request.EntreprisesAdaptees));
 
-            return Ok(result);
+            return result;
         }
     }
 }

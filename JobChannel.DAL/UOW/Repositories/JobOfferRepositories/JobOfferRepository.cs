@@ -167,7 +167,7 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             string query = @"UPDATE JobChannel.JobOffer
                             SET Title = @Title, Description = @Description, PublicationDate = @PublicationDate, 
                             ModificationDate = @ModificationDate, Url = @Url, Salary = @Salary, Experience = @Experience, 
-                            Company = @Company, Id_Job = @Id_Job, ID_Contract = @ID_Contract, Id_City = @Id_City
+                            Company = @Company, Id_Job = @Id_Job, Id_Contract = @Id_Contract, Id_City = @Id_City
                             WHERE Id = @Id";
 
             var param = new DynamicParameters(jobOffer);
@@ -185,7 +185,8 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
             string query = @"DELETE FROM JobChannel.JobOffer
                              WHERE Id = @id";
 
-            return await _dbSession.Connection.ExecuteAsync(query, new { jobOffer.Id }, _dbSession.Transaction);
+            int result = await _dbSession.Connection.ExecuteAsync(query, new { jobOffer.Id }, _dbSession.Transaction);
+            return result == 0 ? throw new BadRequestException("Delete non effectué") : result;
         }
     }
 }

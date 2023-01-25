@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 namespace JobChannel.Tests.Integrations.Fixtures
 {
     // Cette classe créée une instance d'une web application    
-    //TODO   Modifier le nom du startup de l'API à exécuter    
     public class ApiWebApplicationFactory : WebApplicationFactory<API.Startup>
     {
         private IConfiguration Configuration { get; set; }
@@ -27,11 +26,9 @@ namespace JobChannel.Tests.Integrations.Fixtures
             builder.ConfigureTestServices(services =>
             {
                 services.AddAuthentication(defaultScheme: "TestSchemeAdmin")
-                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestSchemeAdmin", options => { });
+                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestSchemeAdmin", options => { })
+                        .AddScheme<AuthenticationSchemeOptions, TestAuthUserHandler>("TestSchemeUser", options => { });
             });
-
-            //TestData.Initialize(Configuration);
         }
-
     }
 }

@@ -8,9 +8,9 @@ using Microsoft.Extensions.Options;
 
 namespace JobChannel.Tests.Integrations.Fixtures
 {
-    public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+    public class TestAuthUserHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        public TestAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
+        public TestAuthUserHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
             : base(options, logger, encoder, clock)
         {
@@ -21,11 +21,11 @@ namespace JobChannel.Tests.Integrations.Fixtures
             var claims = new List<Claim>()
             { 
                 new Claim(ClaimTypes.Name, "Test user"),
-                new Claim(ClaimTypes.Role, "Administrator")
+                new Claim(ClaimTypes.Role, "User")
             };
             var identity = new ClaimsIdentity(claims, "Test");
             var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, "TestSchemeAdmin");
+            var ticket = new AuthenticationTicket(principal, "TestSchemeUser");
 
             var result = AuthenticateResult.Success(ticket);
 

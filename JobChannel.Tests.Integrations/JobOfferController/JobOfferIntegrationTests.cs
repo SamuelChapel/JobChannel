@@ -91,5 +91,20 @@ namespace JobChannel.Tests.Integrations.JobOfferController
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
+
+        [Fact]
+        public async void UpdateJobOfferShouldReturnNotFound()
+        {
+            // Arrange
+            string uri = $"api/JobOffer/1";
+
+            var jobOffer = new JobOffer();
+
+            // Act
+            var response = await _client.PutAsJsonAsync(uri, jobOffer);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
     }
 }
