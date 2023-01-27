@@ -50,8 +50,8 @@ namespace JobChannel.BLL.Services.Authentication.Token
         {
             var key = _configuration.GetValue<string>("Jwt:Key");
 
-            var tokenDeserialize = JwtPayload.Deserialize(token);
-            var issuer = tokenDeserialize.Iss;
+            var deserializedToken = JwtPayload.Deserialize(token);
+            var issuer = deserializedToken.Iss;
 
             var mySecret = Encoding.UTF8.GetBytes(key);
             var mySecurityKey = new SymmetricSecurityKey(mySecret);

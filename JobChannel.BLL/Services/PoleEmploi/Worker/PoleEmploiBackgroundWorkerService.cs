@@ -12,14 +12,14 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
     {
         private readonly CrontabSchedule _schedule;
         private DateTime _nextRun;
-        private const string ScheduleExpression = "0 0 * * *";
+        private const string CronExpression = "0 0 * * *";
 
         private readonly IServiceProvider _serviceProvider;
 
         public PoleEmploiBackgroundWorkerService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _schedule = CrontabSchedule.Parse(ScheduleExpression);
+            _schedule = CrontabSchedule.Parse(CronExpression);
             _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
         }
 
