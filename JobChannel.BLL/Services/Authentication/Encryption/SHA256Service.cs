@@ -3,7 +3,7 @@ using System.Text;
 
 namespace JobChannel.BLL.Services.Authentication.Encryption
 {
-    public class EncryptionService : IEncryptionService
+    public class SHA256Service : IEncryptionService
     {
         public string HashPassword(string plainPassword)
         {
@@ -18,6 +18,11 @@ namespace JobChannel.BLL.Services.Authentication.Encryption
             }
 
             return builder.ToString();
+        }
+
+        public bool VerifyPassword(string hashedPassword, string plainPassword)
+        {
+            return HashPassword(plainPassword).Equals(hashedPassword);
         }
     }
 }

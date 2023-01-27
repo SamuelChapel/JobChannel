@@ -84,7 +84,7 @@ namespace JobChannel.API.Controllers.JobOffers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<int> Create(
+        public async Task<IActionResult> Create(
             JobOfferCreateRequest jobOfferCreateRequest,
             [FromServices] IJobService jobService,
             [FromServices] ICityService cityService,
@@ -108,7 +108,7 @@ namespace JobChannel.API.Controllers.JobOffers
                 Contract = new() { Id = jobOfferCreateRequest.ContractId }
             };
 
-            return await _jobOfferService.Create(jobOffer, jobService, cityService, contractService);
+            return Ok(await _jobOfferService.Create(jobOffer, jobService, cityService, contractService));
         }
 
         [HttpPut("{id}")]

@@ -26,7 +26,7 @@ namespace JobChannel.BLL.Extensions
 
             services.AddScoped<IJobOfferPoleEmploiService, JobOfferPoleEmploiService>();
 
-            services.AddScoped<IEncryptionService, EncryptionService>();
+            services.AddScoped<IEncryptionService, SHA256Service>();
 
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IAuthenticateService, AuthenticateService>();

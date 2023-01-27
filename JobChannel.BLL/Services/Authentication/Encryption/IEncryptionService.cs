@@ -2,6 +2,8 @@
 {
     public interface IEncryptionService
     {
-        string HashPassword(string plainPassword);
+        public string HashPassword(string plainPassword);
+
+        public bool VerifyPassword(string hashedPassword, string plainPassword);
     }
 }
