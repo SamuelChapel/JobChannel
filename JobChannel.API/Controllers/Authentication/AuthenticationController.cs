@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using FluentValidation;
-using JobChannel.API.Controllers.Authentication.Requests;
 using JobChannel.API.Controllers.Security.Requests;
 using JobChannel.BLL.Services.Authentication;
 using Microsoft.AspNetCore.Authorization;

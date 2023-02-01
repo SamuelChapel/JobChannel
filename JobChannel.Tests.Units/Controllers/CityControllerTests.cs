@@ -24,7 +24,7 @@ namespace JobChannel.Tests.Units.Controllers
             var cityController = new CityController(cityServiceMock.Object);
 
             // Act
-            var result = await cityController.GetAll();
+            var result = await cityController.GetAll(null);
 
             // Assert
             Assert.True(result.Count() == citiesResponse.Count());

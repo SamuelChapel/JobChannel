@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using JobChannel.API.Configuration;
 using JobChannel.API.Extensions;
 using JobChannel.BLL.Extensions;
@@ -24,7 +25,13 @@ namespace JobChannel.API
         {
             Configuration.GetConnectionString("OVH");
 
-            services.AddControllers();
+            services.AddControllers()
+                    .AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; // On ne sérialise pas les propriétés à null
+                        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Pas de CamelCase sur les noms des propriétés
+                    });
+
             services.AddApiServices();
             services.AddBLLServices();
             services.AddDALServices();
@@ -47,19 +54,19 @@ namespace JobChannel.API
                     Scheme = "Bearer"
                 });
                 option.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
             });
         }
 
