@@ -83,5 +83,26 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 
             return cities.First();
         }
+
+        public async Task<IEnumerable<City>> GetByName(string name)
+        {
+            string query = @"SELECT c.Id, c.Name, c.Code, c.Population, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
+                            FROM JobChannel.City c
+                            JOIN JobChannel.CityPostcode cpc ON cpc.Id_City = c.Id
+                            JOIN JobChannel.Department d ON d.Id = c.Id_Department
+                            JOIN JobChannel.Region r ON r.Id = d.Id_Region
+                            WHERE c.Name = @name";
+
+            var cities = await _dbSession.Connection.QueryAsync<City, PostCode, Department, Region, City>(query, (city, postcode, department, region) =>
+            {
+                city.Department = department;
+                city.Department.Region = region;
+                city.Postcodes.Add(postcode.Postcode);
+                return city;
+            },
+            param: new { name });
+
+            return cities;
+        }
     }
 }

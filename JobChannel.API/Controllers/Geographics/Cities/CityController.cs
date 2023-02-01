@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using JobChannel.API.Controllers.Geographics.Cities.Responses;
 using System.Linq;
 using JobChannel.Domain.BO;
+using Microsoft.TeamFoundation.Common;
 
 namespace JobChannel.API.Controllers.Geographics.Cities
 {
@@ -16,10 +17,16 @@ namespace JobChannel.API.Controllers.Geographics.Cities
 
         public CityController(ICityService cityService) => _cityService = cityService;
 
-        [HttpGet]
-        public async Task<IEnumerable<CityGetResponse>> GetAll()
+        [HttpGet("")]
+        public async Task<IEnumerable<CityGetResponse>> GetAll(
+            [FromQuery] string? name)
         {
-            return (await _cityService.GetAll()).Select(c => new CityGetResponse(c.Id, c.Name));
+            if(name.IsNullOrEmpty())
+            {
+                return (await _cityService.GetAll()).Select(c => new CityGetResponse(c.Id, c.Name));
+            }
+
+            return (await _cityService.GetByName(name!)).Select(c => new CityGetResponse(c.Id, c.Name)).Distinct();
         }
 
         [HttpGet("Department/{id}")]

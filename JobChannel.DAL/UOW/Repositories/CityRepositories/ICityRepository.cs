@@ -20,5 +20,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
         /// <param name="departmentId">The id of the <typeparamref name="Department"/></param>
         /// <returns>returns an <typeparamref name="IEnumerable"/> of all the <typeparamref name="City"/> in a <typeparamref name="Department"/></returns>
         Task<IEnumerable<City>> GetCitiesByDepartmentId(int departmentId);
+
+        Task<IEnumerable<City>> GetByName(string name);
     }
 }

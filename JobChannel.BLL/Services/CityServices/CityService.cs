@@ -18,5 +18,8 @@ namespace JobChannel.BLL.Services.CityServices
 
         public async Task<City> GetById(int id)
             => await _dbContext.CityRepository.GetById(id);
+
+        public async Task<IEnumerable<City>> GetByName(string name)
+            => await _dbContext.CityRepository.GetByName(name);
     }
 }

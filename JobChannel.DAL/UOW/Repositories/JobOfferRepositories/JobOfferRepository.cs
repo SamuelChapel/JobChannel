@@ -56,15 +56,15 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
 
                         string => field.Key switch
                         {
-                            "Url" => $"jo.Url COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key}",
-                            _ => $"(jo.Title COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
-                                 $"jo.Company COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
-                                 $"c.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
-                                 $"j.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
-                                 $"d.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
-                                 $"r.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
-                                 $"ct.Name COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key} OR " +
-                                 $"jo.Url COLLATE SQL_Latin1_General_CP1_CI_AS LIKE @{field.Key})"
+                            "Url" => $"jo.Url COLLATE SQL_Latin1_General_CP1_CI_AI LIKE @{field.Key}",
+                            _ => $"(jo.Title COLLATE SQL_Latin1_General_CP1_CI_AI LIKE @{field.Key} OR " +
+                                 $"jo.Company COLLATE SQL_Latin1_General_CP1_CI_AI LIKE @{field.Key} OR " +
+                                 $"c.Name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE @{field.Key} OR " +
+                                 $"j.Name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE @{field.Key} OR " +
+                                 $"d.Name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE @{field.Key} OR " +
+                                 $"r.Name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE @{field.Key} OR " +
+                                 $"ct.Name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE @{field.Key} OR " +
+                                 $"jo.Url COLLATE SQL_Latin1_General_CP1_CI_AI LIKE @{field.Key})"
                         },
                         int => field.Key switch
                         {
