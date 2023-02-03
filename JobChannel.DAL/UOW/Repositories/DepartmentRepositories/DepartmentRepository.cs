@@ -16,7 +16,8 @@ namespace JobChannel.DAL.UOW.Repositories.DepartmentRepositories
         public async Task<IEnumerable<Department>> GetAll()
         {
             string query = @"SELECT d.Id, d.Name, d.Code
-                            FROM JobChannel.Department d";
+                            FROM JobChannel.Department d
+                            ORDER BY d.Name";
 
             return await _dbSession.Connection.QueryAsync<Department>(query);
         }
@@ -39,7 +40,8 @@ namespace JobChannel.DAL.UOW.Repositories.DepartmentRepositories
         {
             string query = @"SELECT d.Id, d.Name, d.Code
                             FROM JobChannel.Department d
-                            WHERE d.Id_Region = @regionId";
+                            WHERE d.Id_Region = @regionId
+                            ORDER BY d.Name";
 
             return await _dbSession.Connection.QueryAsync<Department>(query, new { regionId });
         }

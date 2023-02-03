@@ -86,12 +86,21 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 
         public async Task<IEnumerable<City>> GetByName(string name)
         {
-            string query = @"SELECT c.Id, c.Name, c.Code, c.Population, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
+            string query = $@"SELECT c.Id, c.Name, c.Code, c.Population, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
                             FROM JobChannel.City c
                             JOIN JobChannel.CityPostcode cpc ON cpc.Id_City = c.Id
                             JOIN JobChannel.Department d ON d.Id = c.Id_Department
                             JOIN JobChannel.Region r ON r.Id = d.Id_Region
-                            WHERE c.Name = @name";
+                            WHERE c.Name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%{name}%'
+                            ORDER BY
+                                CASE
+                                    WHEN c.Name LIKE '{name}' THEN 1
+                                    WHEN c.Name LIKE '{name}%' THEN 2
+                                    WHEN c.Name LIKE '%{name}' THEN 4
+                                    ELSE 3
+                                END
+                            OFFSET 0 ROWS FETCH FIRST 20 ROWS ONLY";
+
 
             var cities = await _dbSession.Connection.QueryAsync<City, PostCode, Department, Region, City>(query, (city, postcode, department, region) =>
             {
@@ -99,8 +108,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
                 city.Department.Region = region;
                 city.Postcodes.Add(postcode.Postcode);
                 return city;
-            },
-            param: new { name });
+            });
 
             return cities;
         }

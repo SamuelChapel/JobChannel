@@ -15,7 +15,8 @@ namespace JobChannel.DAL.UOW.Repositories.RegionRepositories
         public async Task<IEnumerable<Region>> GetAll()
         {
             string query = @"SELECT r.Id, r.Name, r.Code
-                            FROM JobChannel.Region r";
+                            FROM JobChannel.Region r
+                            ORDER BY r.Name";
 
             return await _dbSession.Connection.QueryAsync<Region>(query);
         }

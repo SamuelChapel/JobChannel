@@ -2,6 +2,8 @@
 {
     public record CityGetResponse(
         int Id,
-        string Name
+        string Name,
+        string PostCode,
+        string DepartmentName
         );
 }
