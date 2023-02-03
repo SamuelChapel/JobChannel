@@ -12,7 +12,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
     {
         private readonly CrontabSchedule _schedule;
         private DateTime _nextRun;
-        private const string CronExpression = "0 0 * * *";
+        private const string CronExpression = "8 9 * * *";
 
         private readonly IServiceProvider _serviceProvider;
 
@@ -47,7 +47,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
 
             IJobOfferPoleEmploiService _jobOfferPoleEmploiService = scope.ServiceProvider.GetRequiredService<IJobOfferPoleEmploiService>();
 
-            await _jobOfferPoleEmploiService.GetAndInsertPoleEmploiJobOffers(query);
+            var nbInserted = await _jobOfferPoleEmploiService.GetAndInsertPoleEmploiJobOffers(query);
         }
     }
 }
