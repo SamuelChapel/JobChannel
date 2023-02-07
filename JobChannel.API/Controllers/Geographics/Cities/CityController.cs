@@ -26,13 +26,14 @@ namespace JobChannel.API.Controllers.Geographics.Cities
                 return (await _cityService.GetAll()).Select(c => new CityGetResponse(c.Id, c.Name, c.Postcodes.First(), c.Department.Name));
             }
 
-            return (await _cityService.GetByName(name!)).Select(c => new CityGetResponse(c.Id, c.Name, c.Postcodes.First(), c.Department.Name)).Distinct().Take(20);
+            return (await _cityService.GetByName(name!)).Select(c => new CityGetResponse(c.Id, c.Name, c.Postcodes.First(), c.Department.Name)).Distinct();
         }
 
         [HttpGet("Department/{id}")]
         public async Task<IEnumerable<CityGetResponse>> GetByDepartmentId(int id)
         {
-            return (await _cityService.GetCitiesByDepartmentId(id)).Select(c => new CityGetResponse(c.Id, c.Name, c.Postcodes.First(), c.Department.Name));
+            var cities = await _cityService.GetCitiesByDepartmentId(id);
+            return cities.Select(c => new CityGetResponse(c.Id, c.Name, c.Postcodes.First(), c.Department.Name));
         }
 
         [HttpGet("{id}")]
