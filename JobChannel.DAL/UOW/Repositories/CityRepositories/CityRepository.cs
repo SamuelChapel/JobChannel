@@ -25,13 +25,27 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
 
         public async Task<IEnumerable<City>> GetCitiesByDepartmentId(int departmentId)
         {
-            var cityQuery = new SqlSelectBuilder(
-                "c.Id, c.Name",
-                "JobChannel.City AS c");
+            var query = @"SELECT c.Id, c.Name, c.Code, c.Population, c.Id, cpc.Postcode
+                          FROM JobChannel.City c
+                          JOIN JobChannel.CityPostcode cpc ON cpc.Id_City = c.Id
+                          WHERE c.Id_Department = @departmentId
+                          ORDER BY c.Population DESC
+                          OFFSET 0 ROWS FETCH FIRST 100 ROWS ONLY";
 
-            return await cityQuery.LeftJoin("JobChannel.Department d", "d.Id = c.Id_Department")
-                                  .Where("c.Id_Department = @departmentId", departmentId)
-                                  .QueryAsync<City>(_dbSession.Connection);
+            var cities = await _dbSession.Connection.QueryAsync<City, PostCode, City>(query, (city, postcode) =>
+            {
+                city.Postcodes.Add(postcode.Postcode);
+                return city;
+            },  
+            param: new { departmentId });
+
+            return cities.GroupBy(c => c.Id).Select(g =>
+            {
+                var groupedCity = g.First();
+                groupedCity.Postcodes = g.Select(c => c.Postcodes.First()).ToList();
+                return groupedCity;
+            });
+
         }
 
         public async Task<City> GetById(int id)
@@ -96,10 +110,10 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
                                 CASE
                                     WHEN c.Name LIKE '{name}' THEN 1
                                     WHEN c.Name LIKE '{name}%' THEN 2
-                                    WHEN c.Name LIKE '%{name}' THEN 4
-                                    ELSE 3
+                                    WHEN c.Name LIKE '%{name}' THEN 3
+                                    ELSE 4
                                 END
-                            OFFSET 0 ROWS FETCH FIRST 20 ROWS ONLY";
+                            OFFSET 0 ROWS FETCH FIRST 100 ROWS ONLY";
 
 
             var cities = await _dbSession.Connection.QueryAsync<City, PostCode, Department, Region, City>(query, (city, postcode, department, region) =>
