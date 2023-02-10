@@ -34,7 +34,7 @@ namespace JobChannel.API.Controllers.JobOffers
         [HttpGet("{id}")]
         public async Task<JobOffer> GetById(
             [FromRoute] int id
-            ) 
+            )
             => await _jobOfferService.GetById(id);
 
         [HttpPost("search")]
