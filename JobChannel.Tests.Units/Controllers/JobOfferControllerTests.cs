@@ -30,7 +30,7 @@ namespace JobChannel.Tests.Units.Controllers
             var jobOfferController = new JobOfferController(mockJobOfferService.Object);
 
             // Act
-            var result = await jobOfferController.GetById(1);
+            var result = await jobOfferController.GetById(id);
 
             // Assert
             Assert.Equal(expectedJobOffer, result);
