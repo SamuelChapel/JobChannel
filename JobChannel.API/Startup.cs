@@ -64,7 +64,7 @@ namespace JobChannel.API
                                 Id="Bearer"
                             }
                         },
-                        new string[]{}
+                        System.Array.Empty<string>()
                     }
                 });
             });
@@ -84,7 +84,7 @@ namespace JobChannel.API
 
             app.UseDocFxUI(settings => settings.Path = "/doc");
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

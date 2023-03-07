@@ -16,7 +16,10 @@ namespace JobChannel.API.Middlewares.ErrorMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public ErrorHandlerMiddleware(RequestDelegate next) => _next = next;
+        public ErrorHandlerMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
 
         public async Task InvokeAsync(HttpContext httpContext)
         {

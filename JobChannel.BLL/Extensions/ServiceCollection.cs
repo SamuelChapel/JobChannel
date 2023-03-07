@@ -6,6 +6,7 @@ using JobChannel.BLL.Services.ContractServices;
 using JobChannel.BLL.Services.DepartmentServices;
 using JobChannel.BLL.Services.JobOfferServices;
 using JobChannel.BLL.Services.JobServices;
+using JobChannel.BLL.Services.PoleEmploi.Auth;
 using JobChannel.BLL.Services.PoleEmploi.JobOffers;
 using JobChannel.BLL.Services.PoleEmploi.Worker;
 using JobChannel.BLL.Services.RegionServices;
@@ -36,6 +37,8 @@ namespace JobChannel.BLL.Extensions
 
         public static IServiceCollection AddBackgroundServices(this IServiceCollection services)
         {
+            services.AddScoped<IAuthServicePoleEmploi, AuthServicePoleEmploi>();
+
             services.AddHostedService<PoleEmploiBackgroundWorkerService>();
 
             return services;

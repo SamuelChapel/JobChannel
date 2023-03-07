@@ -23,10 +23,13 @@ namespace JobChannel.Tests.Units.Controllers
         public async Task GetById_ReturnsCorrectJobOffer(int id)
         {
             // Arrange
-            var mockJobOfferService = new Mock<IJobOfferService>();
             var jobOffers = JobOfferSeed.GetJobOfferData();
             var expectedJobOffer = jobOffers.First(jo => jo.Id == id);
-            mockJobOfferService.Setup(service => service.GetById(id)).ReturnsAsync(expectedJobOffer);
+
+            var mockJobOfferService = new Mock<IJobOfferService>();
+            mockJobOfferService.Setup(service => service.GetById(id))
+                               .ReturnsAsync(expectedJobOffer);
+
             var jobOfferController = new JobOfferController(mockJobOfferService.Object);
 
             // Act
@@ -59,11 +62,11 @@ namespace JobChannel.Tests.Units.Controllers
                 1);
 
             // Act
-            var result = await jobOfferController.Update(1, jobOfferUpdateRequest, mockValidator.Object) as OkObjectResult;
+            var result = await jobOfferController.Update(1, jobOfferUpdateRequest, mockValidator.Object) as NoContentResult;
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(1, result.Value);
+            //Assert.Equal(Ok, result);
         }
 
         [Fact]

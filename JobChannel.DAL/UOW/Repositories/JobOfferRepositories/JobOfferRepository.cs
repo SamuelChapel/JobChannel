@@ -142,10 +142,10 @@ namespace JobChannel.DAL.UOW.Repositories.JobOfferRepositories
         public async Task<int> Create(JobOffer jobOffer)
         {
             string query = @"INSERT INTO JobChannel.JobOffer (Title, Description, PublicationDate, ModificationDate, 
-                             Url, Salary, Experience, Company, Id_Job, ID_Contract, Id_City)
+                             Url, Salary, Experience, Company, Id_Job, Id_Contract, Id_City)
                              OUTPUT INSERTED.ID
-                             VALUES (@Title, @Description, @PublicationDate, @ModificationDate, @Url, @Salary, @Experience, @Company, 
-                             @Id_Job, @ID_Contract, @Id_City)";
+                             VALUES (@Title, @Description, @PublicationDate, @ModificationDate, @Url, @Salary, 
+                                     @Experience, @Company, @Id_Job, @Id_Contract, @Id_City)";
 
             var param = new DynamicParameters(jobOffer);
             param.Add("Id_Contract", jobOffer.Contract.Id);
