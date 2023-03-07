@@ -17,7 +17,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
 {
     internal class JobOfferPoleEmploiService : IJobOfferPoleEmploiService
     {
-        private readonly AuthServicePoleEmploi authServicePole;
+        private readonly IAuthServicePoleEmploi authServicePole;
         private readonly HttpClient client;
 
         private readonly IJobOfferRepository _jobOfferRepository;
@@ -25,9 +25,14 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
         private readonly ICityRepository _cityRepository;
         private readonly IContractRepository _contractRepository;
 
-        public JobOfferPoleEmploiService(IJobOfferRepository jobOfferRepository, IJobRepository jobRepository, ICityRepository cityRepository, IContractRepository contractRepository)
+        public JobOfferPoleEmploiService(
+            IJobOfferRepository jobOfferRepository, 
+            IJobRepository jobRepository, 
+            ICityRepository cityRepository, 
+            IContractRepository contractRepository,
+            IAuthServicePoleEmploi authServicePoleEmploi)
         {
-            authServicePole = new AuthServicePoleEmploi();
+            authServicePole = authServicePoleEmploi;
             client = new HttpClient();
             _jobOfferRepository = jobOfferRepository;
             _jobRepository = jobRepository;

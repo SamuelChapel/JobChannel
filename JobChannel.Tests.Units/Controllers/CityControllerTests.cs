@@ -17,7 +17,7 @@ namespace JobChannel.Tests.Units.Controllers
             // Arrange
             var cityServiceMock = new Mock<ICityService>();
             var cities = GetCitiesData();
-            var citiesResponse = cities.Select(c => new CityGetResponse(c.Id, c.Name));
+            var citiesResponse = cities.Select(c => new CityGetResponse(c.Id, c.Name, c.Postcodes.First(), c.Department.Name));
 
             cityServiceMock.Setup(c => c.GetAll().Result)
                            .Returns(cities);

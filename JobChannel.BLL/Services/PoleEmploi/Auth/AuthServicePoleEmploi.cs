@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Services.OAuth;
 
 namespace JobChannel.BLL.Services.PoleEmploi.Auth
 {
-    public class AuthServicePoleEmploi
+    public class AuthServicePoleEmploi : IAuthServicePoleEmploi
     {
         private DateTime ExpirationDate;
         public bool IsExpired => DateTime.Now > ExpirationDate;
