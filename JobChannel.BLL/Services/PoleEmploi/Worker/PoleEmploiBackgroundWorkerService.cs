@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using JobChannel.BLL.Services.JobOfferServices;
 using JobChannel.BLL.Services.PoleEmploi.JobOffers;
+using JobChannel.DAL.UOW.Repositories.JobOfferRepositories;
+using JobChannel.Domain.BO;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NCrontab;
@@ -14,7 +16,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
     {
         private readonly CrontabSchedule _schedule;
         private DateTime _nextRun;
-        private const string CronExpression = "0 0 * * *";
+        private const string CronExpression = "0 */1 * * *";
 
         private readonly IServiceProvider _serviceProvider;
 
@@ -29,7 +31,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
         {
             do
             {
-                if (DateTime.Now > _nextRun)
+                if (DateTime.Now >= _nextRun)
                 {
                     await CleanupJobOffers();
                     await LookForNewJobOffers("M1805");
@@ -46,20 +48,14 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
         {
             using IServiceScope scope = _serviceProvider.CreateScope();
 
-            var _jobOfferService = scope.ServiceProvider.GetRequiredService<IJobOfferService>();
+            var _jobOfferPoleEmploiService = scope.ServiceProvider.GetRequiredService<IJobOfferPoleEmploiService>();
 
-            var filters = new Dictionary<string, dynamic>()
-            {
-                {"StartDate", DateTime.MinValue },
-                {"EndDate",  DateTime.Today.AddMonths(-6) }
-            };
-
-            var jobOffers = await _jobOfferService.GetAll(filters);
+            await _jobOfferPoleEmploiService.CleanUpJobOffers();
         }
 
         private async Task LookForNewJobOffers(string codeRome)
         {
-            var query = new GetPoleEmploiJobOffersQuery(null, codeRome, null, 1, null);
+            var query = new GetPoleEmploiJobOffersQuery((0, 149), codeRome, null, 1, null);
 
             using IServiceScope scope = _serviceProvider.CreateScope();
 

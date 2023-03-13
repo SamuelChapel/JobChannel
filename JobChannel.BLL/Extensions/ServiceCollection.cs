@@ -26,6 +26,7 @@ namespace JobChannel.BLL.Extensions
             services.AddScoped<IJobOfferService, JobOfferService>();
 
             services.AddScoped<IJobOfferPoleEmploiService, JobOfferPoleEmploiService>();
+            services.AddScoped<IAuthServicePoleEmploi, AuthServicePoleEmploi>();
 
             services.AddScoped<IEncryptionService, SHA256Service>();
 
@@ -37,8 +38,6 @@ namespace JobChannel.BLL.Extensions
 
         public static IServiceCollection AddBackgroundServices(this IServiceCollection services)
         {
-            services.AddScoped<IAuthServicePoleEmploi, AuthServicePoleEmploi>();
-
             services.AddHostedService<PoleEmploiBackgroundWorkerService>();
 
             return services;

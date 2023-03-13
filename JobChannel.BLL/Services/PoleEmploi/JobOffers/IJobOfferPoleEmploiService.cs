@@ -4,6 +4,8 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
 {
     public interface IJobOfferPoleEmploiService
     {
+        Task CleanUpJobOffers();
+
         /// <summary>
         /// Get job offer's from "pôle emploi" and insert it
         /// </summary>
