@@ -6,6 +6,7 @@ namespace JobChannel.API.Controllers.JobOffers.Requests
     public record JobOfferFindResponse(
         int Id,
         string Title,
+        string Description,
         DateTime PublicationDate,
         string Url,
         string Salary,

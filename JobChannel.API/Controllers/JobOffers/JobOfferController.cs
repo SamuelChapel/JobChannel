@@ -62,6 +62,7 @@ namespace JobChannel.API.Controllers.JobOffers
             var jobOffersResponses = jobOffers.Select(jo => new JobOfferFindResponse(
                 jo.Id,
                 jo.Title,
+                jo.Description,
                 jo.PublicationDate,
                 jo.Url,
                 jo.Salary,
