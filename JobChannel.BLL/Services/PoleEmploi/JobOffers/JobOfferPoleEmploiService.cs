@@ -92,6 +92,16 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
             return i;
         }
 
+        public async Task GetPoleEmploiJobOffersForAllJobs()
+        {
+            var jobs = await _jobRepository.GetAll();
+
+            foreach (Job job in jobs)
+            {
+                await GetAndInsertPoleEmploiJobOffers(new GetPoleEmploiJobOffersQuery((0, 149), job.CodeRome, null, 1, null));
+            }
+        }
+
         private async Task<IEnumerable<JobOfferPoleEmploi>?> GetJobOffers(GetPoleEmploiJobOffersQuery query)
         {
             if (authServicePole.IsExpired)

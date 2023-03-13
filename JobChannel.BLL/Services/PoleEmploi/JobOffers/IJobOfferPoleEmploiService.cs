@@ -12,5 +12,6 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
         /// <param name="query">The <typeparamref name="GetPoleEmploiJobOffersQuery"/> who contains the parameters for the job offer search</param>
         /// <returns>The number of job offer's added</returns>
         Task<int> GetAndInsertPoleEmploiJobOffers(GetPoleEmploiJobOffersQuery query);
+        Task GetPoleEmploiJobOffersForAllJobs();
     }
 }

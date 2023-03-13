@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using JobChannel.BLL.Services.JobOfferServices;
 using JobChannel.BLL.Services.PoleEmploi.JobOffers;
-using JobChannel.DAL.UOW.Repositories.JobOfferRepositories;
-using JobChannel.Domain.BO;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NCrontab;
@@ -34,7 +30,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
                 if (DateTime.Now >= _nextRun)
                 {
                     await CleanupJobOffers();
-                    await LookForNewJobOffers("M1805");
+                    await LookForNewJobOffers();
                     _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
                 }
 
@@ -53,15 +49,13 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
             await _jobOfferPoleEmploiService.CleanUpJobOffers();
         }
 
-        private async Task LookForNewJobOffers(string codeRome)
+        private async Task LookForNewJobOffers()
         {
-            var query = new GetPoleEmploiJobOffersQuery((0, 149), codeRome, null, 1, null);
-
             using IServiceScope scope = _serviceProvider.CreateScope();
 
             var _jobOfferPoleEmploiService = scope.ServiceProvider.GetRequiredService<IJobOfferPoleEmploiService>();
 
-            var nbInserted = await _jobOfferPoleEmploiService.GetAndInsertPoleEmploiJobOffers(query);
+            await _jobOfferPoleEmploiService.GetPoleEmploiJobOffersForAllJobs();
         }
     }
 }
