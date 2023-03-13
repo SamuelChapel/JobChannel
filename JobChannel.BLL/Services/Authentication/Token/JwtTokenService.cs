@@ -23,17 +23,13 @@ namespace JobChannel.BLL.Services.Authentication.Token
                 new Claim(ClaimTypes.NameIdentifier, username)
             };
 
-            //Add Roles
             Array.ForEach(roles, role => claims.Add(new Claim(ClaimTypes.Role, role)));
 
-            //Signin Key
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key")));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            //Expiration time
             var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:Expiration_Time"]));
 
-            //Create JWT Token Object
             var token = new JwtSecurityToken(
             _configuration["Jwt:Issuer"],
             _configuration["Jwt:Issuer"],
@@ -42,7 +38,6 @@ namespace JobChannel.BLL.Services.Authentication.Token
             signingCredentials: creds
             );
 
-            //Serializes a JwtSecurityToken into a JWT in Compact Serialization Format.
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 

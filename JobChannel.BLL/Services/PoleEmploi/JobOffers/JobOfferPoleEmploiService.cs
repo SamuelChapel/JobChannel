@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -8,7 +9,6 @@ using JobChannel.DAL.UOW.Repositories.ContractRepositories;
 using JobChannel.DAL.UOW.Repositories.JobOfferRepositories;
 using JobChannel.DAL.UOW.Repositories.JobRepositories;
 using JobChannel.Domain.BO;
-using System.Linq;
 using JobChannel.DAL.ObjectExtensions;
 using JobChannel.BLL.Services.PoleEmploi.Auth;
 using Microsoft.TeamFoundation.Common;
@@ -26,9 +26,9 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
         private readonly IContractRepository _contractRepository;
 
         public JobOfferPoleEmploiService(
-            IJobOfferRepository jobOfferRepository, 
-            IJobRepository jobRepository, 
-            ICityRepository cityRepository, 
+            IJobOfferRepository jobOfferRepository,
+            IJobRepository jobRepository,
+            ICityRepository cityRepository,
             IContractRepository contractRepository,
             IAuthServicePoleEmploi authServicePoleEmploi)
         {
@@ -39,25 +39,64 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
             _cityRepository = cityRepository;
             _contractRepository = contractRepository;
         }
+        public async Task CleanUpJobOffers()
+        {
+            var filters = new Dictionary<string, dynamic>()
+            {
+                {"StartDate", new DateTime(1900,1,1) },
+                {"EndDate",  DateTime.Today.AddMonths(-6) }
+            };
+
+            var jobOffers = await _jobOfferRepository.GetAll(filters);
+
+            foreach (JobOffer jobOffer in jobOffers)
+            {
+                await _jobOfferRepository.Delete(jobOffer);
+            }
+        }
 
         public async Task<int> GetAndInsertPoleEmploiJobOffers(GetPoleEmploiJobOffersQuery query)
         {
-            var jo = await GetJobOffers(query);
-
+            List<JobOfferPoleEmploi> jo = new List<JobOfferPoleEmploi>();
             int i = 0;
+
+            if (!query.Range.HasValue || query.Range.Value.Item2 - query.Range.Value.Item1 < 150)
+            {
+                var jobOffers = await GetJobOffers(query);
+                if (jobOffers != null)
+                    jo.AddRange(jobOffers);
+            }
+            else
+            {
+                int min = query.Range.Value.Item1;
+                int max = query.Range.Value.Item2;
+
+                for (int j = min; j <= max; j += 150)
+                {
+                    var query2 = new GetPoleEmploiJobOffersQuery((j, j + 149 < max ? j + 149 : max), query?.CodeRome, query?.Commune, query?.PublieeDepuis, query?.EntreprisesAdaptees);
+                    var jobOffers = await GetJobOffers(query2);
+                    if (jobOffers != null)
+                        jo.AddRange(jobOffers);
+                }
+            }
 
             foreach (JobOfferPoleEmploi jobOffer in jo)
             {
-                i += await InsertJobOfferPoleEmploi(jobOffer);
+                if (await JobOfferAlreadyExist(jobOffer))
+                    break;
+
+                if (await InsertJobOfferPoleEmploi(jobOffer))
+                    i++;
             }
 
             return i;
         }
 
-        private async Task<IEnumerable<JobOfferPoleEmploi>> GetJobOffers(GetPoleEmploiJobOffersQuery query)
+        private async Task<IEnumerable<JobOfferPoleEmploi>?> GetJobOffers(GetPoleEmploiJobOffersQuery query)
         {
             if (authServicePole.IsExpired)
                 await authServicePole.GenerateAccessToken(client);
+
             var request = $"https://api.pole-emploi.io/partenaire/offresdemploi/v2/offres/search?";
 
             bool first = true;
@@ -93,26 +132,23 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
 
             var result = await client.GetStringAsync(request);
 
-            var offres = JsonSerializer.Deserialize<OffresEmplois>(result, new JsonSerializerOptions()
+            if (!string.IsNullOrEmpty(result))
             {
-                PropertyNameCaseInsensitive = true
-            });
+                var offres = JsonSerializer.Deserialize<OffresEmplois>(result, new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
-            return offres!.Resultats;
+                return offres!.Resultats;
+            }
+
+            return null;
         }
 
-        private async Task<int> InsertJobOfferPoleEmploi(JobOfferPoleEmploi jobOfferPoleEmploi)
+        private async Task<bool> InsertJobOfferPoleEmploi(JobOfferPoleEmploi jobOfferPoleEmploi)
         {
-            var filters = new Dictionary<string, dynamic>()
-            {
-                {
-                    "Url", jobOfferPoleEmploi.OrigineOffre.UrlOrigine.NormalizeAndRemoveDiacriticsAndToLower()
-                }
-            };
-
-            var jobOffers = await _jobOfferRepository.GetAll(filters);
-            if (jobOffers.Any() || jobOfferPoleEmploi.RomeCode.IsNullOrEmpty() || jobOfferPoleEmploi.TypeContrat.IsNullOrEmpty() || jobOfferPoleEmploi.LieuTravail.CodePostal.IsNullOrEmpty())
-                return 0;
+            if (jobOfferPoleEmploi.RomeCode.IsNullOrEmpty() || jobOfferPoleEmploi.TypeContrat.IsNullOrEmpty() || jobOfferPoleEmploi.LieuTravail.CodePostal.IsNullOrEmpty())
+                return false;
 
             // Get Job
             Job job = await _jobRepository.GetByRomeCode(jobOfferPoleEmploi.RomeCode);
@@ -138,13 +174,28 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
                 Url = jobOfferPoleEmploi.OrigineOffre.UrlOrigine
             };
 
-            //if (jobOffers.Any())
-            //{
-            //    jobOffer.Id = jobOffers.First().Id;
-            //    return await _jobOfferRepository.Update(jobOffer);
-            //}
+            if (job != null && contract != null && city != null)
+            {
+                var id = await _jobOfferRepository.Create(jobOffer);
+                return id != 0;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-            return await _jobOfferRepository.Create(jobOffer);
+        private async Task<bool> JobOfferAlreadyExist(JobOfferPoleEmploi jobOfferPoleEmploi)
+        {
+            var filters = new Dictionary<string, dynamic>()
+            {
+                {
+                    "Url", jobOfferPoleEmploi.OrigineOffre.UrlOrigine.NormalizeAndRemoveDiacriticsAndToLower()
+                }
+            };
+
+            var jobOffers = await _jobOfferRepository.GetAll(filters);
+            return jobOffers.Any();
         }
     }
 
