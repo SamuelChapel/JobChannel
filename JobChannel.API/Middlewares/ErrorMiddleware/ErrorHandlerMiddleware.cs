@@ -9,14 +9,20 @@ using JobChannel.DAL.UOW;
 using JobChannel.Domain.Exceptions;
 using JobChannel.Domain.Exceptions.Base;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace JobChannel.API.Middlewares.ErrorMiddleware
 {
     public class ErrorHandlerMiddleware
     {
+        private readonly ILogger _logger;
         private readonly RequestDelegate _next;
 
-        public ErrorHandlerMiddleware(RequestDelegate next) => _next = next;
+        public ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger)
+        {
+            _next = next;
+            _logger = logger;
+        }
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
@@ -41,7 +47,11 @@ namespace JobChannel.API.Middlewares.ErrorMiddleware
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)GetHttpStatusCodeByException(thrownException);
 
-            await context.Response.WriteAsync(GetErrorResponseByException(thrownException));
+            string errorResponse = GetErrorResponseByException(thrownException);
+
+            _logger.LogWarning(errorResponse);
+
+            await context.Response.WriteAsync(errorResponse);
         }
 
         private string GetErrorResponseByException(Exception thrownException)

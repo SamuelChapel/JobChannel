@@ -15,11 +15,15 @@ namespace JobChannel.DAL.UOW
         public ICityRepository CityRepository { get => new CityRepository(DbSession); }
         public IDepartmentRepository DepartmentRepository { get => new DepartmentRepository(DbSession); }
         public IRegionRepository RegionRepository { get => new RegionRepository(DbSession); }
-        public IJobOfferRepository JobOfferRepository { get => new JobOfferRepository(DbSession); }
+        public IJobOfferRepository JobOfferRepository { get; private set; }
 
         public IDbSession DbSession { get; set; }
 
-        public UnitOfWork(IDbSession dbSession) => DbSession = dbSession;
+        public UnitOfWork(IDbSession dbSession, IJobOfferRepository jobOfferRepository)
+        {
+            DbSession = dbSession;
+            JobOfferRepository = jobOfferRepository;
+        }
 
         public void BeginTransaction() => DbSession.Transaction = DbSession.Connection.BeginTransaction();
 

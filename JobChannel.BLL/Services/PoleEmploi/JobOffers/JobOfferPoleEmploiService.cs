@@ -12,11 +12,14 @@ using JobChannel.Domain.BO;
 using JobChannel.DAL.ObjectExtensions;
 using JobChannel.BLL.Services.PoleEmploi.Auth;
 using Microsoft.TeamFoundation.Common;
+using Microsoft.Extensions.Logging;
 
 namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
 {
     internal class JobOfferPoleEmploiService : IJobOfferPoleEmploiService
     {
+        private readonly ILogger _logger;
+
         private readonly IAuthServicePoleEmploi authServicePole;
         private readonly HttpClient client;
 
@@ -30,7 +33,8 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
             IJobRepository jobRepository,
             ICityRepository cityRepository,
             IContractRepository contractRepository,
-            IAuthServicePoleEmploi authServicePoleEmploi)
+            IAuthServicePoleEmploi authServicePoleEmploi,
+            ILogger<JobOfferPoleEmploiService> logger)
         {
             authServicePole = authServicePoleEmploi;
             client = new HttpClient();
@@ -38,7 +42,9 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
             _jobRepository = jobRepository;
             _cityRepository = cityRepository;
             _contractRepository = contractRepository;
+            _logger = logger;
         }
+
         public async Task CleanUpJobOffers()
         {
             var filters = new Dictionary<string, dynamic>()
@@ -98,7 +104,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
 
             foreach (Job job in jobs)
             {
-                Console.WriteLine(job.Name);
+                _logger.LogInformation("Vérification pour le job {job}", job.Name);
 
                 await GetAndInsertPoleEmploiJobOffers(new GetPoleEmploiJobOffersQuery((0, 149), job.CodeRome, null, 1, null));
             }
@@ -153,14 +159,14 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
                         PropertyNameCaseInsensitive = true
                     });
 
-                    Console.WriteLine(offres!.Resultats.Count());
+                    _logger.LogInformation("{number} offres récupérées pour le {job}", offres.Resultats.Count(), query.CodeRome);
 
                     return offres!.Resultats;
                 }
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
             }
 
             return null;
@@ -168,10 +174,10 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
 
         private async Task<bool> InsertJobOfferPoleEmploi(JobOfferPoleEmploi jobOfferPoleEmploi)
         {
+            _logger.LogInformation("Traitement de l'offre : {id} {titre} {date}", jobOfferPoleEmploi.Id, jobOfferPoleEmploi.Intitule, jobOfferPoleEmploi.DateActualisation);
+
             if (jobOfferPoleEmploi.RomeCode.IsNullOrEmpty() || jobOfferPoleEmploi.TypeContrat.IsNullOrEmpty() || jobOfferPoleEmploi.LieuTravail.CodePostal.IsNullOrEmpty())
                 return false;
-
-            Console.WriteLine(jobOfferPoleEmploi.RomeCode + " " + jobOfferPoleEmploi.Id + " " + jobOfferPoleEmploi.DateActualisation);
 
             // Get Job
             Job job = await _jobRepository.GetByRomeCode(jobOfferPoleEmploi.RomeCode);
@@ -180,7 +186,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
             Contract contract = await _contractRepository.GetByCode(jobOfferPoleEmploi.TypeContrat);
 
             // Get City
-            City city = await _cityRepository.GetByPostCode(jobOfferPoleEmploi.LieuTravail.CodePostal);
+            City? city = await _cityRepository.GetByPostCode(jobOfferPoleEmploi.LieuTravail.CodePostal);
 
             if (job != null && contract != null && city != null)
             {
@@ -204,6 +210,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
             }
             else
             {
+                _logger.LogWarning("Offre {id} {titre} {date} non insérée", jobOfferPoleEmploi.Id, jobOfferPoleEmploi.Intitule, jobOfferPoleEmploi.DateActualisation);
                 return false;
             }
         }
