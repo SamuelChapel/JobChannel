@@ -98,58 +98,69 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
 
             foreach (Job job in jobs)
             {
+                Console.WriteLine(job.Name);
+
                 await GetAndInsertPoleEmploiJobOffers(new GetPoleEmploiJobOffersQuery((0, 149), job.CodeRome, null, 1, null));
             }
         }
 
         private async Task<IEnumerable<JobOfferPoleEmploi>?> GetJobOffers(GetPoleEmploiJobOffersQuery query)
         {
-            if (authServicePole.IsExpired)
-                await authServicePole.GenerateAccessToken(client);
-
-            var request = $"https://api.pole-emploi.io/partenaire/offresdemploi/v2/offres/search?";
-
-            bool first = true;
-
-            if (query.Range.HasValue)
+            try
             {
-                request += $"range={query.Range.Value.Item1}-{query.Range.Value.Item2}";
-                first = false;
-            }
+                if (authServicePole.IsExpired)
+                    await authServicePole.GenerateAccessToken(client);
 
-            if (query.CodeRome?.Length > 0)
-            {
-                request += $"{(first ? "" : "&")}codeROME={query.CodeRome}";
-                first = false;
-            }
+                var request = $"https://api.pole-emploi.io/partenaire/offresdemploi/v2/offres/search?";
 
-            if (query.Commune?.Length > 0)
-            {
-                request += $"{(first ? "" : "&")}commune={query.Commune}";
-                first = false;
-            }
+                bool first = true;
 
-            if (query.PublieeDepuis.HasValue)
-            {
-                request += $"{(first ? "" : "&")}publieeDepuis={query.PublieeDepuis}";
-                first = false;
-            }
-
-            if (query.EntreprisesAdaptees.HasValue)
-            {
-                request += $"{(first ? "" : "&")}entreprisesAdaptees={query.EntreprisesAdaptees?.ToString().ToLower()}";
-            }
-
-            var result = await client.GetStringAsync(request);
-
-            if (!string.IsNullOrEmpty(result))
-            {
-                var offres = JsonSerializer.Deserialize<OffresEmplois>(result, new JsonSerializerOptions()
+                if (query.Range.HasValue)
                 {
-                    PropertyNameCaseInsensitive = true
-                });
+                    request += $"range={query.Range.Value.Item1}-{query.Range.Value.Item2}";
+                    first = false;
+                }
 
-                return offres!.Resultats;
+                if (query.CodeRome?.Length > 0)
+                {
+                    request += $"{(first ? "" : "&")}codeROME={query.CodeRome}";
+                    first = false;
+                }
+
+                if (query.Commune?.Length > 0)
+                {
+                    request += $"{(first ? "" : "&")}commune={query.Commune}";
+                    first = false;
+                }
+
+                if (query.PublieeDepuis.HasValue)
+                {
+                    request += $"{(first ? "" : "&")}publieeDepuis={query.PublieeDepuis}";
+                    first = false;
+                }
+
+                if (query.EntreprisesAdaptees.HasValue)
+                {
+                    request += $"{(first ? "" : "&")}entreprisesAdaptees={query.EntreprisesAdaptees?.ToString().ToLower()}";
+                }
+
+                var result = await client.GetStringAsync(request);
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    var offres = JsonSerializer.Deserialize<OffresEmplois>(result, new JsonSerializerOptions()
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    Console.WriteLine(offres!.Resultats.Count());
+
+                    return offres!.Resultats;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
             }
 
             return null;
@@ -160,6 +171,8 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
             if (jobOfferPoleEmploi.RomeCode.IsNullOrEmpty() || jobOfferPoleEmploi.TypeContrat.IsNullOrEmpty() || jobOfferPoleEmploi.LieuTravail.CodePostal.IsNullOrEmpty())
                 return false;
 
+            Console.WriteLine(jobOfferPoleEmploi.RomeCode + " " + jobOfferPoleEmploi.Id + " " + jobOfferPoleEmploi.DateActualisation);
+
             // Get Job
             Job job = await _jobRepository.GetByRomeCode(jobOfferPoleEmploi.RomeCode);
 
@@ -169,23 +182,23 @@ namespace JobChannel.BLL.Services.PoleEmploi.JobOffers
             // Get City
             City city = await _cityRepository.GetByPostCode(jobOfferPoleEmploi.LieuTravail.CodePostal);
 
-            var jobOffer = new JobOffer
-            {
-                City = city,
-                Contract = contract,
-                Job = job,
-                Experience = jobOfferPoleEmploi.ExperienceLibelle,
-                Company = jobOfferPoleEmploi.Entreprise.Nom,
-                Description = jobOfferPoleEmploi.Description,
-                Salary = jobOfferPoleEmploi.Salaire.Libelle,
-                PublicationDate = jobOfferPoleEmploi.DateCreation,
-                ModificationDate = jobOfferPoleEmploi.DateActualisation,
-                Title = jobOfferPoleEmploi.Intitule,
-                Url = jobOfferPoleEmploi.OrigineOffre.UrlOrigine
-            };
-
             if (job != null && contract != null && city != null)
             {
+                var jobOffer = new JobOffer
+                {
+                    City = city,
+                    Contract = contract,
+                    Job = job,
+                    Experience = jobOfferPoleEmploi.ExperienceLibelle,
+                    Company = jobOfferPoleEmploi.Entreprise.Nom,
+                    Description = jobOfferPoleEmploi.Description,
+                    Salary = jobOfferPoleEmploi.Salaire.Libelle,
+                    PublicationDate = jobOfferPoleEmploi.DateCreation,
+                    ModificationDate = jobOfferPoleEmploi.DateActualisation,
+                    Title = jobOfferPoleEmploi.Intitule,
+                    Url = jobOfferPoleEmploi.OrigineOffre.UrlOrigine
+                };
+
                 var id = await _jobOfferRepository.Create(jobOffer);
                 return id != 0;
             }
