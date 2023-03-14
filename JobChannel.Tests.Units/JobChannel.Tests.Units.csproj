@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\JobChannel.API\JobChannel.API.csproj" />
     <ProjectReference Include="..\JobChannel.BLL\JobChannel.BLL.csproj" />
     <ProjectReference Include="..\JobChannel.Tests.Commons\JobChannel.Tests.Commons.csproj" />

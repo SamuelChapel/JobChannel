@@ -12,7 +12,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
         /// </summary>
         /// <param name="postCode">the <typeparamref name="string"/> of the PostCode</param>
         /// <returns>The <typeparamref name="City"/> who corresponds to this PostCode</returns>
-        Task<City> GetByPostCode(string postCode);
+        Task<City?> GetByPostCode(string postCode);
 
         /// <summary>
         /// Get all the <typeparamref name="City"/> for a <typeparamref name="Department"/>

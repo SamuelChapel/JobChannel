@@ -77,7 +77,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
             }).Single();
         }
 
-        public async Task<City> GetByPostCode(string postCode)
+        public async Task<City?> GetByPostCode(string postCode)
         {
             string query = @"SELECT c.Id, c.Name, c.Code, c.Population, c.Id, cpc.Postcode, d.Id, d.Name, d.Code, r.Id, r.Name, r.Code
                             FROM JobChannel.City c
@@ -95,7 +95,7 @@ namespace JobChannel.DAL.UOW.Repositories.CityRepositories
             },
             param: new { postCode });
 
-            return cities.First();
+            return cities.FirstOrDefault();
         }
 
         public async Task<IEnumerable<City>> GetByName(string name)
