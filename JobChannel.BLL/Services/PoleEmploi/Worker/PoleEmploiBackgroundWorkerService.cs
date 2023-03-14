@@ -4,23 +4,26 @@ using System.Threading.Tasks;
 using JobChannel.BLL.Services.PoleEmploi.JobOffers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NCrontab;
 
 namespace JobChannel.BLL.Services.PoleEmploi.Worker
 {
     public class PoleEmploiBackgroundWorkerService : BackgroundService
     {
+        private readonly ILogger _logger;
         private readonly CrontabSchedule _schedule;
         private DateTime _nextRun;
-        private const string CronExpression = "0 */1 * * *";
+        private const string CronExpression = "48 */1 * * *";
 
         private readonly IServiceProvider _serviceProvider;
 
-        public PoleEmploiBackgroundWorkerService(IServiceProvider serviceProvider)
+        public PoleEmploiBackgroundWorkerService(IServiceProvider serviceProvider, ILogger<PoleEmploiBackgroundWorkerService> logger)
         {
             _serviceProvider = serviceProvider;
             _schedule = CrontabSchedule.Parse(CronExpression);
             _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,6 +35,7 @@ namespace JobChannel.BLL.Services.PoleEmploi.Worker
                     await CleanupJobOffers();
                     await LookForNewJobOffers();
                     _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
+                    _logger.LogInformation("Prochaine execution de {serviceName} le {date}", nameof(PoleEmploiBackgroundWorkerService), _nextRun);
                 }
 
                 TimeSpan waitTime = _nextRun - DateTime.Now;

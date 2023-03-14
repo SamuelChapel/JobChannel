@@ -13,6 +13,7 @@ using JobChannel.BLL.Services.PoleEmploi.JobOffers;
 using JobChannel.Domain.BO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace JobChannel.API.Controllers.JobOffers
 {
@@ -23,19 +24,24 @@ namespace JobChannel.API.Controllers.JobOffers
     [ApiController]
     public class JobOfferController : ControllerBase, IGenericReadController<JobOffer, int, JobOfferFindRequest, JobOfferFindResponse>
     {
+        private readonly ILogger _logger;
         private readonly IJobOfferService _jobOfferService;
 
-        /// <summary>
-        /// Constructor for the JobOfferController
-        /// </summary>
-        /// <param name="jobOfferService"></param>
-        public JobOfferController(IJobOfferService jobOfferService) => _jobOfferService = jobOfferService;
+        public JobOfferController(IJobOfferService jobOfferService, ILogger<JobOfferController> logger)
+        {
+            _jobOfferService = jobOfferService;
+            _logger = logger;
+        }
 
         [HttpGet("{id}")]
         public async Task<JobOffer> GetById(
             [FromRoute] int id
             )
-            => await _jobOfferService.GetById(id);
+        {
+            _logger.LogInformation("Appel de {methodName} avec l id {id}", nameof(GetById), id);
+
+            return await _jobOfferService.GetById(id);
+        }
 
         [HttpPost("search")]
         public async Task<IEnumerable<JobOfferFindResponse>> Find(
@@ -119,6 +125,7 @@ namespace JobChannel.API.Controllers.JobOffers
             [FromBody] JobOfferUpdateRequest jobOfferUpdateRequest,
             [FromServices] IValidator<JobOfferUpdateRequest> validator)
         {
+
             await validator.ValidateAndThrowAsync(jobOfferUpdateRequest);
 
             JobOffer jobOffer = new()
